@@ -673,20 +673,13 @@
     <div id="template-library-modal" class="fixed inset-0 bg-gray-900/60 z-[70] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
-                <h3 class="text-lg font-bold text-gray-900"><i class="fa-regular fa-copy text-blue-500 mr-2"></i> Vybrat šablonu z knihovny</h3>
+                <h3 class="text-lg font-bold text-gray-900"><i class="fa-regular fa-copy text-brand-500 mr-2"></i> Vybrat šablonu z knihovny</h3>
                 <button onclick="closeTemplatesLibraryModal()" class="text-gray-400 hover:text-gray-600 transition">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
-            <div class="p-6 overflow-y-auto max-h-80 custom-scrollbar space-y-3">
-                <button onclick="applyTemplateFromLibrary('Dobrý den, moc děkujeme za úžasné hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.')" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-brand-500 hover:bg-green-50 transition group shadow-sm">
-                    <p class="font-bold text-sm text-gray-900 mb-1 group-hover:text-brand-700">Poděkování (5 hvězd)</p>
-                    <p class="text-sm text-gray-600 line-clamp-2">Dobrý den, moc děkujeme za úžasné hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.</p>
-                </button>
-                <button onclick="applyTemplateFromLibrary('Dobrý den, děkujeme za hodnocení. Velmi nás mrzí, že Vaše zkušenost nebyla ideální. Prosím, kontaktujte nás na info@firma.cz, rádi s Vámi situaci vyřešíme.')" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-brand-500 hover:bg-green-50 transition group shadow-sm">
-                    <p class="font-bold text-sm text-gray-900 mb-1 group-hover:text-brand-700">Omluva (Krizová komunikace)</p>
-                    <p class="text-sm text-gray-600 line-clamp-2">Dobrý den, děkujeme za hodnocení. Velmi nás mrzí, že Vaše zkušenost nebyla ideální. Prosím, kontaktujte nás na info@firma.cz, rádi s Vámi situaci vyřešíme.</p>
-                </button>
+            <div id="template-library-list" class="p-6 overflow-y-auto max-h-[60vh] custom-scrollbar">
+                <!-- Obsah se načte dynamicky pomocí JS z vytvořených šablon -->
             </div>
         </div>
     </div>
@@ -1176,19 +1169,80 @@
 
         // === KNIHOVNA ŠABLON V INBOXU ===
         let activeInboxTextareaId = null;
+        
         function openTemplatesLibraryModal(textareaId) {
             activeInboxTextareaId = textareaId;
             const modal = document.getElementById('template-library-modal');
+            const listContainer = document.getElementById('template-library-list');
+            
+            // 1. Získání počtu hvězdiček aktuální recenze
+            const textarea = document.getElementById(textareaId);
+            const reviewCard = textarea.closest('.review-item');
+            
+            let starCount = 5; // Výchozí hodnota
+            if (reviewCard) {
+                const starsContainer = reviewCard.querySelector('.text-yellow-400');
+                if (starsContainer) {
+                    // Spočítá plné (vybarvené) hvězdičky pro zjištění hodnocení
+                    starCount = starsContainer.querySelectorAll('.fa-solid.fa-star').length;
+                }
+            }
+
+            // 2. Dynamické načtení šablon POUZE pro daný počet hvězdiček
+            listContainer.innerHTML = '';
+            let templateCount = 0;
+
+            const acc = document.getElementById('acc-' + starCount);
+            if (acc) {
+                // Najdeme všechny texty šablon vytvořené v akordeonu
+                const templates = acc.querySelectorAll('p.text-gray-800.flex-1');
+                
+                if (templates.length > 0) {
+                    const titleStr = starCount === 1 ? '1 hvězdičku (Krizová)' : (starCount >= 2 && starCount <= 4 ? starCount + ' hvězdičky' : starCount + ' hvězdiček');
+                    
+                    let groupHtml = `<div class="mb-5 last:mb-0">
+                        <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider mb-3 border-b border-brand-100 pb-1.5 flex items-center gap-1.5"><i class="fa-solid fa-star text-yellow-400 text-sm"></i> Dostupné šablony pro ${titleStr}</p>
+                        <div class="space-y-2">`;
+                    
+                    templates.forEach(t => {
+                        templateCount++;
+                        const text = t.innerText.trim();
+                        // Bezpečné escapování textu pro volání z tlačítka
+                        const safeText = text.replace(/"/g, '&quot;').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+                        
+                        groupHtml += `
+                        <button onclick="applyTemplateFromLibrary('${safeText}')" class="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-brand-500 hover:bg-green-50 transition group shadow-sm">
+                            <p class="text-sm text-gray-600 line-clamp-2 group-hover:text-brand-700">${text}</p>
+                        </button>
+                        `;
+                    });
+                    groupHtml += `</div></div>`;
+                    listContainer.insertAdjacentHTML('beforeend', groupHtml);
+                }
+            }
+            
+            // 3. Pokud uživatel ještě žádné šablony pro daný počet hvězd nemá
+            if (templateCount === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-6">
+                        <i class="fa-regular fa-comment-dots text-4xl text-gray-300 mb-3 block"></i>
+                        <p class="text-sm text-gray-500">Pro hodnocení ${starCount} hvězdičkami zatím nemáte definované žádné šablony.</p>
+                        <button onclick="closeTemplatesLibraryModal(); switchTab('tab-sablony');" class="mt-3 text-brand-600 font-bold text-xs hover:underline">Přejít do správy šablon a vytvořit je</button>
+                    </div>`;
+            }
+
             const modalContent = modal.querySelector('div');
             modal.classList.remove('opacity-0', 'pointer-events-none');
             setTimeout(() => modalContent.classList.remove('scale-95'), 10);
         }
+        
         function closeTemplatesLibraryModal() {
             const modal = document.getElementById('template-library-modal');
             const modalContent = modal.querySelector('div');
             modalContent.classList.add('scale-95');
             setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 300);
         }
+        
         function applyTemplateFromLibrary(text) {
             if (activeInboxTextareaId) {
                 const textarea = document.getElementById(activeInboxTextareaId);
