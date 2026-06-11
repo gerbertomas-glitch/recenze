@@ -260,18 +260,31 @@
                         </div>
                         
                         <div class="flex items-center gap-3 w-full md:w-auto">
-                            <!-- Hodnocení (Dummy select) -->
+                            <!-- Hodnocení -->
                             <div class="relative w-full md:w-48">
                                 <select class="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-sm font-medium text-gray-700 appearance-none focus:outline-none focus:border-brand-500">
                                     <option>Všechna hodnocení</option>
                                     <option>5 hvězdiček</option>
                                     <option>4 hvězdičky</option>
-                                    <option>1-3 hvězdičky</option>
+                                    <option>3 hvězdičky</option>
+                                    <option>2 hvězdičky</option>
+                                    <option>1 hvězdička</option>
                                 </select>
                                 <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
                             </div>
 
-                            <!-- Filtr poboček s našeptávačem, reagující na celou šířku pole -->
+                            <!-- Řazení -->
+                            <div class="relative w-full md:w-48">
+                                <select class="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-sm font-medium text-gray-700 appearance-none focus:outline-none focus:border-brand-500">
+                                    <option>Od nejnovějšího</option>
+                                    <option>Od nejstaršího</option>
+                                    <option>Od nejlepšího</option>
+                                    <option>Od nejhoršího</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+                            </div>
+
+                            <!-- Filtr poboček s našeptávačem -->
                             <div class="relative w-full md:w-64" id="inbox-branch-wrapper">
                                 <div class="bg-white border border-gray-200 rounded-md px-3 py-2 flex items-center cursor-text focus-within:border-brand-500 transition shadow-sm" onclick="toggleInboxBranchDropdown()">
                                     <input type="text" id="inbox-branch-input" onkeyup="filterInboxBranches()" onclick="event.stopPropagation(); document.getElementById('inbox-branch-dropdown').classList.remove('hidden');" class="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none w-full cursor-pointer" placeholder="Vyberte pobočku" value="Všechny pobočky (3)" autocomplete="off">
@@ -346,8 +359,8 @@
                                 
                                 <div class="relative">
                                     <textarea id="textarea-1" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Dobrý den, Petře..."></textarea>
-                                    <!-- AI Loader -->
-                                    <div id="loader-1" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                                    <!-- AI Loader s fixovaným flexboxem a animacemi -->
+                                    <div id="loader-1" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
                                         <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
                                         <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
                                     </div>
@@ -398,7 +411,7 @@
                                 </div>
                                 <div class="relative">
                                     <textarea id="textarea-2" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište omluvu zákazníkovi..."></textarea>
-                                    <div id="loader-2" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                                    <div id="loader-2" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
                                         <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
                                         <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
                                     </div>
@@ -448,7 +461,7 @@
                                 </div>
                                 <div class="relative">
                                     <textarea id="textarea-3" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište zákazníkovi..."></textarea>
-                                    <div id="loader-3" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                                    <div id="loader-3" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
                                         <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
                                         <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
                                     </div>
@@ -500,7 +513,7 @@
                                 </div>
                                 <div class="relative">
                                     <textarea id="textarea-4" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište zákazníkovi..."></textarea>
-                                    <div id="loader-4" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                                    <div id="loader-4" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
                                         <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
                                         <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
                                     </div>
@@ -552,7 +565,7 @@
                                 </div>
                                 <div class="relative">
                                     <textarea id="textarea-5" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište zákazníkovi..."></textarea>
-                                    <div id="loader-5" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                                    <div id="loader-5" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
                                         <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
                                         <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
                                     </div>
@@ -560,6 +573,62 @@
                                 <div class="flex justify-end gap-3 mt-4">
                                     <button onclick="closeReply('reply-5')" class="text-sm font-medium text-gray-500 hover:text-gray-700 transition">Zrušit</button>
                                     <button onclick="submitReply('reply-5', 'actions-5')" class="bg-brand-500 text-white hover:bg-brand-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow-sm">Odeslat</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RECENZE 6 (Neodpovězená, 5 hvězd, s fotkami) -->
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Liberec">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">DK</div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900 text-sm">David Krejčí</h4>
+                                        <div class="flex text-yellow-400 text-xs mt-0.5">
+                                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                            <span class="text-gray-400 ml-2 font-medium">• před 10 minutami</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded text-[10px] font-bold uppercase tracking-wider border border-blue-100">Neodpovězeno</span>
+                            </div>
+                            
+                            <p class="text-sm text-gray-800 mb-3">Byl jsem nadšený z nové kampaně, kterou nám tým připravil. Přikládám i fotky ze schůzky a vizuálů. Skvělá práce!</p>
+                            
+                            <!-- Fotografie z recenze -->
+                            <div class="flex gap-2 mb-6">
+                                <img src="https://placehold.co/150x150/e2e8f0/9ca3af?text=Foto+1" alt="Fotografie klienta 1" class="w-16 h-16 rounded-md object-cover border border-gray-200 cursor-pointer hover:opacity-80 transition">
+                                <img src="https://placehold.co/150x150/e2e8f0/9ca3af?text=Foto+2" alt="Fotografie klienta 2" class="w-16 h-16 rounded-md object-cover border border-gray-200 cursor-pointer hover:opacity-80 transition">
+                            </div>
+                            
+                            <div class="flex justify-between items-center" id="actions-6">
+                                <p class="text-[11px] font-bold text-gray-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Liberec</p>
+                                <div class="flex gap-2">
+                                    <button onclick="openReportModal()" class="bg-white border border-gray-300 text-gray-400 hover:text-red-500 hover:border-red-300 px-3 py-1.5 rounded-lg text-xs font-medium transition" title="Nahlásit jako nevhodné"><i class="fa-solid fa-flag"></i></button>
+                                    <button onclick="openReply('reply-6')" class="bg-white border border-gray-300 hover:border-brand-500 text-brand-600 px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2"><i class="fa-solid fa-reply"></i> Odpovědět</button>
+                                </div>
+                            </div>
+                            
+                            <div id="reply-6" class="hidden mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 relative">
+                                <div class="flex justify-between items-center mb-3">
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Vaše odpověď (veřejná)</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="openTemplatesLibraryModal('textarea-6')" class="bg-white border border-gray-300 hover:border-gray-400 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm"><i class="fa-regular fa-copy"></i> Použít šablonu</button>
+                                        <button onclick="generateAI('textarea-6', 'loader-6')" class="bg-white border border-brand-300 hover:border-brand-500 text-brand-600 hover:bg-brand-50 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm relative overflow-hidden group">
+                                            <span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Návrh</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="textarea-6" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište zákazníkovi..."></textarea>
+                                    <div id="loader-6" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
+                                        <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
+                                        <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end gap-3 mt-4">
+                                    <button onclick="closeReply('reply-6')" class="text-sm font-medium text-gray-500 hover:text-gray-700 transition">Zrušit</button>
+                                    <button onclick="submitReply('reply-6', 'actions-6')" class="bg-brand-500 text-white hover:bg-brand-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow-sm">Odeslat</button>
                                 </div>
                             </div>
                         </div>
@@ -924,7 +993,7 @@
                     <p class="text-xs text-gray-500 mt-3" id="ai-template-hint">Generuji pro: <strong>5 hvězdiček</strong></p>
                 </div>
 
-                <!-- Loader -->
+                <!-- Loader s flex-col a transition upravenými -->
                 <div id="ai-template-loader" class="hidden flex-col items-center justify-center py-8 opacity-0 transition-opacity duration-300">
                     <div class="typing-indicator flex items-center justify-center mb-3">
                         <span></span><span></span><span></span>
@@ -1271,7 +1340,6 @@
             
             reviewCard.dataset.status = 'answered';
             showToast('Odpověď byla úspěšně odeslána na Google');
-            applyReviewFilters();
         }
 
         function editReply(id, actionsId) {
@@ -1299,7 +1367,7 @@
                     </div>
                     <div class="relative">
                         <textarea id="textarea-${num}" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište veřejnou odpověď zákazníkovi..."></textarea>
-                        <div id="loader-${num}" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                        <div id="loader-${num}" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
                             <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
                             <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
                         </div>
@@ -1324,8 +1392,11 @@
             const textarea = document.getElementById(textareaId);
             const loader = document.getElementById(loaderId);
             
+            if(!textarea || !loader) return;
+            
             textarea.disabled = true;
             loader.classList.remove('hidden');
+            loader.classList.add('flex');
             setTimeout(() => loader.classList.remove('opacity-0'), 10);
             
             setTimeout(() => {
@@ -1333,6 +1404,7 @@
                 loader.classList.add('opacity-0');
                 setTimeout(() => {
                     loader.classList.add('hidden');
+                    loader.classList.remove('flex');
                     textarea.disabled = false;
                 }, 300);
             }, 1500);
@@ -1498,7 +1570,9 @@
 
             resultsBox.classList.add('hidden');
             saveBtn.classList.add('hidden');
+            
             loader.classList.remove('hidden');
+            loader.classList.add('flex');
             setTimeout(() => loader.classList.remove('opacity-0'), 10);
 
             setTimeout(() => {
@@ -1526,6 +1600,7 @@
 
                 setTimeout(() => {
                     loader.classList.add('hidden');
+                    loader.classList.remove('flex');
                     resultsBox.classList.remove('hidden');
                     saveBtn.classList.remove('hidden');
                 }, 300);
