@@ -272,7 +272,7 @@
                             <!-- Filtr poboček s našeptávačem -->
                             <div class="relative w-full md:w-64" id="inbox-branch-wrapper">
                                 <div class="bg-white border border-gray-200 rounded-md px-3 py-2 flex items-center cursor-text focus-within:border-brand-500 transition shadow-sm" onclick="toggleInboxBranchDropdown()">
-                                    <input type="text" id="inbox-branch-input" onkeyup="filterInboxBranches()" onclick="event.stopPropagation();" class="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none w-full" placeholder="Vyberte pobočku" value="Všechny pobočky (3)" autocomplete="off">
+                                    <input type="text" id="inbox-branch-input" onkeyup="filterInboxBranches()" onclick="event.stopPropagation(); document.getElementById('inbox-branch-dropdown').classList.remove('hidden');" class="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none w-full" placeholder="Vyberte pobočku" value="Všechny pobočky (3)" autocomplete="off">
                                     <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] ml-2 pointer-events-none"></i>
                                 </div>
                                 <div id="inbox-branch-dropdown" class="absolute right-0 top-full mt-1 w-full md:w-72 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden flex-col overflow-hidden">
@@ -1095,6 +1095,13 @@
                 return;
             }
 
+            // Uložení původního HTML formuláře, abychom se k němu mohli při editaci vrátit
+            if (!box.dataset.formHtml) {
+                box.dataset.formHtml = box.innerHTML;
+            }
+            // Uložení aktuálního textu pro editaci
+            box.dataset.currentText = replyText;
+
             // Výměna štítku nahoře na "Odpovězeno"
             const statusPill = reviewCard.querySelector('span.bg-blue-50');
             if (statusPill) {
@@ -1108,7 +1115,7 @@
                 if (actionButtons) actionButtons.classList.add('hidden');
             }
 
-            // Vykreslení samotné odpovědi
+            // Vykreslení samotné odpovědi s možností úpravy
             box.className = 'bg-green-50/50 border-l-2 border-brand-500 p-4 rounded-r-lg mt-4 block';
             box.innerHTML = `
                 <div class="flex justify-between items-center mb-2">
@@ -1116,13 +1123,37 @@
                         <p class="text-xs font-bold text-brand-700">Odeslaná odpověď</p>
                         <span class="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-[9px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1"><i class="fa-solid fa-user text-[10px]"></i> Tomáš Gerber (Vy)</span>
                     </div>
-                    <p class="text-[10px] text-gray-500">Právě teď</p>
+                    <div class="flex items-center gap-3">
+                        <p class="text-[10px] text-gray-500">Právě teď</p>
+                        <button onclick="editReply('${id}', '${actionsId}')" class="text-[10px] font-bold text-brand-600 hover:text-brand-800 transition flex items-center gap-1"><i class="fa-solid fa-pen"></i> Upravit</button>
+                    </div>
                 </div>
                 <p class="text-sm text-gray-800 mt-1">${replyText.replace(/\n/g, '<br>')}</p>
             `;
             
             reviewCard.dataset.status = 'answered';
             showToast('Odpověď byla úspěšně odeslána na Google');
+        }
+
+        function editReply(id, actionsId) {
+            const box = document.getElementById(id);
+            
+            // Vrácení boxu do stavu editoru
+            box.className = 'mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 relative block';
+            box.innerHTML = box.dataset.formHtml;
+            
+            // Vrácení původního textu
+            const textarea = box.querySelector('textarea');
+            if (textarea) {
+                textarea.value = box.dataset.currentText || '';
+                textarea.focus();
+            }
+
+            // Přepsání textu tlačítka, aby dávalo smysl
+            const submitBtn = box.querySelector('button.bg-brand-500');
+            if (submitBtn) {
+                submitBtn.innerText = 'Uložit úpravy';
+            }
         }
 
         function generateAI(textareaId, loaderId) {
