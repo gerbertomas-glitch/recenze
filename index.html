@@ -411,7 +411,7 @@
                         </div>
 
                         <!-- RECENZE 3 (Odpovězená ručně, 5 hvězd) -->
-                        <div class="card-minimal p-5 review-item" data-status="answered" data-branch="Liberec">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Liberec">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-sm">JS</div>
@@ -423,24 +423,41 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="px-2.5 py-1 bg-green-50 text-brand-600 rounded text-[10px] font-bold uppercase tracking-wider border border-green-100">Odpovězeno</span>
+                                <span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded text-[10px] font-bold uppercase tracking-wider border border-blue-100">Neodpovězeno</span>
                             </div>
                             
                             <p class="text-sm text-gray-800 mb-6">Moc milý personál, vše proběhlo na jedničku. Určitě se vrátím!</p>
                             
-                            <!-- Odeslaná odpověď -->
-                            <div class="bg-green-50/50 border-l-2 border-brand-500 p-4 rounded-r-lg mb-2">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="flex items-center gap-2">
-                                        <p class="text-xs font-bold text-brand-700">Odeslaná odpověď</p>
-                                        <span class="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-[9px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1"><i class="fa-solid fa-user text-[10px]"></i> Tomáš Gerber (Vy)</span>
-                                    </div>
-                                    <p class="text-[10px] text-gray-500">Před 2 dny</p>
+                            <div class="flex justify-between items-center" id="actions-3">
+                                <p class="text-[11px] font-bold text-gray-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Liberec</p>
+                                <div class="flex gap-2">
+                                    <button onclick="openReportModal()" class="bg-white border border-gray-300 text-gray-400 hover:text-red-500 hover:border-red-300 px-3 py-1.5 rounded-lg text-xs font-medium transition" title="Nahlásit jako nevhodné"><i class="fa-solid fa-flag"></i></button>
+                                    <button onclick="openReply('reply-3')" class="bg-white border border-gray-300 hover:border-brand-500 text-brand-600 px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2"><i class="fa-solid fa-reply"></i> Odpovědět</button>
                                 </div>
-                                <p class="text-sm text-gray-800 mt-1">Dobrý den, Jano, moc děkujeme za krásných 5 hvězdiček! Jsme rádi, že jste byla spokojená a budeme se těšit na další návštěvu.</p>
                             </div>
                             
-                            <p class="text-[11px] font-bold text-gray-400 uppercase flex items-center gap-1.5 mt-4"><i class="fa-solid fa-location-dot"></i> Liberec</p>
+                            <div id="reply-3" class="hidden mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 relative">
+                                <div class="flex justify-between items-center mb-3">
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Vaše odpověď (veřejná)</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="openTemplatesLibraryModal('textarea-3')" class="bg-white border border-gray-300 hover:border-gray-400 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm"><i class="fa-regular fa-copy"></i> Použít šablonu</button>
+                                        <button onclick="generateAI('textarea-3', 'loader-3')" class="bg-white border border-brand-300 hover:border-brand-500 text-brand-600 hover:bg-brand-50 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm relative overflow-hidden group">
+                                            <span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Návrh</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="textarea-3" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište zákazníkovi..."></textarea>
+                                    <div id="loader-3" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                                        <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
+                                        <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end gap-3 mt-4">
+                                    <button onclick="closeReply('reply-3')" class="text-sm font-medium text-gray-500 hover:text-gray-700 transition">Zrušit</button>
+                                    <button onclick="submitReply('reply-3', 'actions-3')" class="bg-brand-500 text-white hover:bg-brand-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow-sm">Odeslat</button>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- RECENZE 4 (Neodpovězená, 3 hvězdy, bez textu) -->
@@ -496,7 +513,7 @@
                         </div>
 
                         <!-- RECENZE 5 (Odpovězeno automatizací, 5 hvězd) -->
-                        <div class="card-minimal p-5 review-item" data-status="answered" data-branch="Brno">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Brno">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-sm">EB</div>
@@ -508,26 +525,43 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="px-2.5 py-1 bg-green-50 text-brand-600 rounded text-[10px] font-bold uppercase tracking-wider border border-green-100">Odpovězeno</span>
+                                <span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded text-[10px] font-bold uppercase tracking-wider border border-blue-100">Neodpovězeno</span>
                             </div>
                             
                             <div class="bg-gray-50 border border-gray-100 border-dashed rounded-lg p-3 text-center mb-6">
                                 <p class="text-xs text-gray-500 italic">Uživatel nezanechal žádný text, pouze hodnocení.</p>
                             </div>
                             
-                            <!-- Odeslaná odpověď automatem -->
-                            <div class="bg-green-50/50 border-l-2 border-brand-500 p-4 rounded-r-lg mb-2">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="flex items-center gap-2">
-                                        <p class="text-xs font-bold text-brand-700">Odeslaná odpověď</p>
-                                        <span class="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-[9px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1" title="Odpovězeno automatem"><i class="fa-solid fa-robot text-[10px]"></i> Automat</span>
-                                    </div>
-                                    <p class="text-[10px] text-gray-500">Před 6 dny</p>
+                            <div class="flex justify-between items-center" id="actions-5">
+                                <p class="text-[11px] font-bold text-gray-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Brno</p>
+                                <div class="flex gap-2">
+                                    <button onclick="openReportModal()" class="bg-white border border-gray-300 text-gray-400 hover:text-red-500 hover:border-red-300 px-3 py-1.5 rounded-lg text-xs font-medium transition" title="Nahlásit jako nevhodné"><i class="fa-solid fa-flag"></i></button>
+                                    <button onclick="openReply('reply-5')" class="bg-white border border-gray-300 hover:border-brand-500 text-brand-600 px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2"><i class="fa-solid fa-reply"></i> Odpovědět</button>
                                 </div>
-                                <p class="text-sm text-gray-800 mt-1">Dobrý den, moc děkujeme za úžasné hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.</p>
                             </div>
                             
-                            <p class="text-[11px] font-bold text-gray-400 uppercase flex items-center gap-1.5 mt-4"><i class="fa-solid fa-location-dot"></i> Brno</p>
+                            <div id="reply-5" class="hidden mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 relative">
+                                <div class="flex justify-between items-center mb-3">
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Vaše odpověď (veřejná)</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="openTemplatesLibraryModal('textarea-5')" class="bg-white border border-gray-300 hover:border-gray-400 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm"><i class="fa-regular fa-copy"></i> Použít šablonu</button>
+                                        <button onclick="generateAI('textarea-5', 'loader-5')" class="bg-white border border-brand-300 hover:border-brand-500 text-brand-600 hover:bg-brand-50 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm relative overflow-hidden group">
+                                            <span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Návrh</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="textarea-5" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište zákazníkovi..."></textarea>
+                                    <div id="loader-5" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                                        <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
+                                        <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end gap-3 mt-4">
+                                    <button onclick="closeReply('reply-5')" class="text-sm font-medium text-gray-500 hover:text-gray-700 transition">Zrušit</button>
+                                    <button onclick="submitReply('reply-5', 'actions-5')" class="bg-brand-500 text-white hover:bg-brand-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow-sm">Odeslat</button>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -537,137 +571,128 @@
                 <div id="tab-sablony" class="hidden space-y-6">
                     <div class="flex justify-between items-end mb-4">
                         <div>
-                            <h3 class="font-bold text-gray-900 text-lg">Šablony odpovědí a generátor</h3>
-                            <p class="text-sm text-gray-500 mt-1">Vytvořte si knihovnu vlastních odpovědí. Šablony slouží jak pro ruční výběr v Inboxu, tak pro Auto-odpovědi.</p>
+                            <h3 class="font-bold text-gray-900 text-lg">Knihovna šablon</h3>
+                            <p class="text-sm text-gray-500 mt-1">Předpřipravte si odpovědi pro různé počty hvězdiček. Systém je pak může automaticky střídat.</p>
                         </div>
                     </div>
 
                     <div class="space-y-4">
-                        
-                        <!-- Akordeon: 5 Hvězd -->
-                        <div class="card-minimal overflow-hidden transition-all duration-300">
-                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-5', 'icon-5')">
+                        <!-- 5 hvězdiček -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="px-6 py-4 flex justify-between items-center bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-5', 'icon-5')">
                                 <div class="flex items-center gap-3">
                                     <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                                    <h4 class="font-bold text-gray-900">Šablony pro 5 hvězdiček (Poděkování)</h4>
+                                    <h4 class="font-bold text-gray-900">Šablony pro 5 hvězdiček</h4>
                                 </div>
                                 <i id="icon-5" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                             </div>
-                            <div id="acc-5" class="hidden bg-white">
+                            <div id="acc-5" class="hidden border-t border-gray-200">
                                 <div class="p-6 space-y-3">
                                     <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 flex justify-between items-start gap-4 hover:border-brand-300 transition-colors">
-                                        <p class="text-sm text-gray-800 flex-1">Dobrý den, moc děkujeme za skvělé hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.</p>
+                                        <p class="text-sm text-gray-800 flex-1">Dobrý den, moc děkujeme za úžasné hodnocení a 5 hvězdiček! Velice si toho vážíme a těšíme se na další spolupráci.</p>
                                         <div class="flex gap-2 shrink-0">
                                             <button onclick="openManualTemplateModal(5, this.closest('.border-gray-200').querySelector('p').innerText)" class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
                                             <button onclick="this.closest('.border-gray-200').remove(); showToast('Šablona smazána');" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
                                         </div>
                                     </div>
                                     <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 flex justify-between items-start gap-4 hover:border-brand-300 transition-colors">
-                                        <p class="text-sm text-gray-800 flex-1">Krásný den, vážíme si Vašeho hodnocení a 5 hvězdiček. Děláme maximum pro to, aby naši zákazníci odcházeli s úsměvem.</p>
+                                        <p class="text-sm text-gray-800 flex-1">Dobrý den, děkujeme za skvělou zpětnou vazbu. Jsme moc rádi, že jste byli s našimi službami spokojeni!</p>
                                         <div class="flex gap-2 shrink-0">
                                             <button onclick="openManualTemplateModal(5, this.closest('.border-gray-200').querySelector('p').innerText)" class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
                                             <button onclick="this.closest('.border-gray-200').remove(); showToast('Šablona smazána');" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
                                         </div>
                                     </div>
-                                    <div class="pt-4 flex justify-end gap-3">
-                                        <button onclick="openManualTemplateModal(5, '')" class="text-sm font-bold text-gray-700 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-plus"></i> Přidat ručně</button>
-                                        <button onclick="openAiTemplateModal(5)" class="text-sm font-bold text-white bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
+                                    <div class="pt-4 flex gap-3">
+                                        <button onclick="openManualTemplateModal(5, '')" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Přidat ručně</button>
+                                        <button onclick="openAiTemplateModal(5)" class="bg-brand-50 text-brand-700 border border-brand-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-brand-100 transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Akordeon: 4 Hvězdy -->
-                        <div class="card-minimal overflow-hidden transition-all duration-300">
-                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-4', 'icon-4')">
+                        <!-- 4 hvězdičky -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="px-6 py-4 flex justify-between items-center bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-4', 'icon-4')">
                                 <div class="flex items-center gap-3">
                                     <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i></div>
                                     <h4 class="font-bold text-gray-900">Šablony pro 4 hvězdičky</h4>
                                 </div>
                                 <i id="icon-4" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                             </div>
-                            <div id="acc-4" class="hidden bg-white">
+                            <div id="acc-4" class="hidden border-t border-gray-200">
                                 <div class="p-6 space-y-3">
-                                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 flex justify-between items-start gap-4 hover:border-brand-300 transition-colors">
-                                        <p class="text-sm text-gray-800 flex-1">Dobrý den, děkujeme za vysoké hodnocení. Vaší zpětné vazby si moc vážíme a doufáme, že příště dosáhneme rovnou na hvězdiček pět!</p>
-                                        <div class="flex gap-2 shrink-0">
-                                            <button onclick="openManualTemplateModal(4, this.closest('.border-gray-200').querySelector('p').innerText)" class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
-                                            <button onclick="this.closest('.border-gray-200').remove(); showToast('Šablona smazána');" class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
-                                        </div>
+                                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                        <p class="text-sm text-gray-500">Zatím nemáte vytvořené žádné šablony pro toto hodnocení.</p>
                                     </div>
-                                    <div class="pt-4 flex justify-end gap-3">
-                                        <button onclick="openManualTemplateModal(4, '')" class="text-sm font-bold text-gray-700 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-plus"></i> Přidat ručně</button>
-                                        <button onclick="openAiTemplateModal(4)" class="text-sm font-bold text-white bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
+                                    <div class="pt-4 flex gap-3">
+                                        <button onclick="openManualTemplateModal(4, '')" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Přidat ručně</button>
+                                        <button onclick="openAiTemplateModal(4)" class="bg-brand-50 text-brand-700 border border-brand-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-brand-100 transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Akordeon: 3 Hvězdy -->
-                        <div class="card-minimal overflow-hidden transition-all duration-300">
-                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-3', 'icon-3')">
+                        <!-- 3 hvězdičky -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="px-6 py-4 flex justify-between items-center bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-3', 'icon-3')">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star text-amber-500"></i><i class="fa-solid fa-star text-amber-500"></i><i class="fa-solid fa-star text-amber-500"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i></div>
-                                    <h4 class="font-bold text-gray-900">Šablony pro 3 hvězdičky (Neutrální)</h4>
+                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i></div>
+                                    <h4 class="font-bold text-gray-900">Šablony pro 3 hvězdičky</h4>
                                 </div>
                                 <i id="icon-3" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                             </div>
-                            <div id="acc-3" class="hidden bg-white">
+                            <div id="acc-3" class="hidden border-t border-gray-200">
                                 <div class="p-6 space-y-3">
-                                    <div class="text-center p-6 bg-gray-50 border border-gray-200 border-dashed rounded-lg">
-                                        <p class="text-sm text-gray-500">Zatím nemáte žádné šablony pro 3 hvězdičky.</p>
+                                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                        <p class="text-sm text-gray-500">Zatím nemáte vytvořené žádné šablony pro toto hodnocení.</p>
                                     </div>
-                                    <div class="pt-4 flex justify-end gap-3">
-                                        <button onclick="openManualTemplateModal(3, '')" class="text-sm font-bold text-gray-700 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-plus"></i> Přidat ručně</button>
-                                        <button onclick="openAiTemplateModal(3)" class="text-sm font-bold text-white bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
+                                    <div class="pt-4 flex gap-3">
+                                        <button onclick="openManualTemplateModal(3, '')" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Přidat ručně</button>
+                                        <button onclick="openAiTemplateModal(3)" class="bg-brand-50 text-brand-700 border border-brand-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-brand-100 transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Akordeon: 2 Hvězdy -->
-                        <div class="card-minimal overflow-hidden transition-all duration-300">
-                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-2', 'icon-2')">
+                        <!-- 2 hvězdičky -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="px-6 py-4 flex justify-between items-center bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-2', 'icon-2')">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star text-orange-500"></i><i class="fa-solid fa-star text-orange-500"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i></div>
+                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i></div>
                                     <h4 class="font-bold text-gray-900">Šablony pro 2 hvězdičky</h4>
                                 </div>
                                 <i id="icon-2" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                             </div>
-                            <div id="acc-2" class="hidden bg-white">
+                            <div id="acc-2" class="hidden border-t border-gray-200">
                                 <div class="p-6 space-y-3">
-                                    <div class="text-center p-6 bg-gray-50 border border-gray-200 border-dashed rounded-lg">
-                                        <p class="text-sm text-gray-500">Zatím nemáte žádné šablony pro 2 hvězdičky.</p>
+                                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                        <p class="text-sm text-gray-500">Zatím nemáte vytvořené žádné šablony pro toto hodnocení.</p>
                                     </div>
-                                    <div class="pt-4 flex justify-end gap-3">
-                                        <button onclick="openManualTemplateModal(2, '')" class="text-sm font-bold text-gray-700 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-plus"></i> Přidat ručně</button>
-                                        <button onclick="openAiTemplateModal(2)" class="text-sm font-bold text-white bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
+                                    <div class="pt-4 flex gap-3">
+                                        <button onclick="openManualTemplateModal(2, '')" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Přidat ručně</button>
+                                        <button onclick="openAiTemplateModal(2)" class="bg-brand-50 text-brand-700 border border-brand-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-brand-100 transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Akordeon: 1 Hvězda -->
-                        <div class="card-minimal overflow-hidden transition-all duration-300">
-                            <div class="bg-red-50/30 border-b border-gray-200 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-red-50/50 transition" onclick="toggleTemplateAcc('acc-1', 'icon-1')">
+                        <!-- 1 hvězdička -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="px-6 py-4 flex justify-between items-center bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="toggleTemplateAcc('acc-1', 'icon-1')">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star text-red-500"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i></div>
-                                    <h4 class="font-bold text-gray-900">Šablony pro 1 hvězdičku (Krizová komunikace)</h4>
+                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i></div>
+                                    <h4 class="font-bold text-gray-900">Šablony pro 1 hvězdičku</h4>
                                 </div>
                                 <i id="icon-1" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                             </div>
-                            <div id="acc-1" class="hidden bg-white">
+                            <div id="acc-1" class="hidden border-t border-gray-200">
                                 <div class="p-6 space-y-3">
-                                    <div class="border border-red-100 rounded-lg p-4 bg-red-50/20 flex justify-between items-start gap-4">
-                                        <p class="text-sm text-gray-800 flex-1">Dobrý den, velmi nás mrzí, že Vaše zkušenost nebyla podle Vašich představ. Rádi bychom situaci vyřešili. Prosím, kontaktujte nás na info@businesspower.cz, abychom to mohli napravit.</p>
-                                        <div class="flex gap-2 shrink-0">
-                                            <button class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
-                                            <button class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
-                                        </div>
+                                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                        <p class="text-sm text-gray-500">Zatím nemáte vytvořené žádné šablony pro toto hodnocení.</p>
                                     </div>
-                                    <div class="pt-4 flex justify-end gap-3">
-                                        <button onclick="openManualTemplateModal(1, '')" class="text-sm font-bold text-gray-700 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-plus"></i> Přidat ručně</button>
-                                        <button onclick="openAiTemplateModal(1)" class="text-sm font-bold text-white bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
+                                    <div class="pt-4 flex gap-3">
+                                        <button onclick="openManualTemplateModal(1, '')" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Přidat ručně</button>
+                                        <button onclick="openAiTemplateModal(1)" class="bg-brand-50 text-brand-700 border border-brand-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-brand-100 transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Generovat pomocí AI</button>
                                     </div>
                                 </div>
                             </div>
@@ -1193,9 +1218,17 @@
             const box = document.getElementById(id);
             box.classList.remove('hidden');
         }
-        function closeReply(id) {
+
+        function cancelEdit(id) {
             const box = document.getElementById(id);
-            box.classList.add('hidden');
+            if (box.dataset.renderedHtml) {
+                // Vrátíme se do staticého stavu odeslané odpovědi
+                box.className = 'bg-green-50/50 border-l-2 border-brand-500 p-4 rounded-r-lg mt-6 block';
+                box.innerHTML = box.dataset.renderedHtml;
+            } else {
+                // Jde o první (ještě neodeslanou) odpověď - jen ji schováme
+                box.classList.add('hidden');
+            }
         }
 
         function submitReply(id, actionsId) {
@@ -1214,19 +1247,14 @@
             }
             box.dataset.currentText = replyText;
 
-            const statusPill = reviewCard.querySelector('span.bg-blue-50');
-            if (statusPill) {
-                statusPill.className = 'px-2.5 py-1 bg-green-50 text-brand-600 rounded text-[10px] font-bold uppercase tracking-wider border border-green-100';
-                statusPill.innerText = 'Odpovězeno';
-            }
-
             if (actionsId) {
                 const actionButtons = document.getElementById(actionsId);
                 if (actionButtons) actionButtons.classList.add('hidden');
             }
 
+            // Uložíme a sestavíme statickou podobu odpovědi
             box.className = 'bg-green-50/50 border-l-2 border-brand-500 p-4 rounded-r-lg mt-6 block';
-            box.innerHTML = `
+            box.dataset.renderedHtml = `
                 <div class="flex justify-between items-center mb-2">
                     <div class="flex items-center gap-2">
                         <p class="text-xs font-bold text-brand-700">Odeslaná odpověď</p>
@@ -1239,25 +1267,56 @@
                 </div>
                 <p class="text-sm text-gray-800 mt-1">${replyText.replace(/\n/g, '<br>')}</p>
             `;
+            box.innerHTML = box.dataset.renderedHtml;
             
             reviewCard.dataset.status = 'answered';
             showToast('Odpověď byla úspěšně odeslána na Google');
+            applyReviewFilters();
         }
 
         function editReply(id, actionsId) {
             const box = document.getElementById(id);
+            
+            // Záloha aktuálního vizuálu odeslané odpovědi (pokud neexistuje)
+            if (!box.dataset.renderedHtml) {
+                box.dataset.renderedHtml = box.innerHTML;
+            }
+
             box.className = 'mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 relative block';
+            
+            // Dynamické vytvoření formuláře, pokud uživatel dosud needitoval
+            if (!box.dataset.formHtml) {
+                const num = id.split('-')[1];
+                box.dataset.formHtml = `
+                    <div class="flex justify-between items-center mb-3">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Úprava odpovědi</p>
+                        <div class="flex gap-2">
+                            <button onclick="openTemplatesLibraryModal('textarea-${num}')" class="bg-white border border-gray-300 hover:border-gray-400 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm"><i class="fa-regular fa-copy"></i> Použít šablonu</button>
+                            <button onclick="generateAI('textarea-${num}', 'loader-${num}')" class="bg-white border border-brand-300 hover:border-brand-500 text-brand-600 hover:bg-brand-50 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm relative overflow-hidden group">
+                                <span class="relative z-10 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Návrh</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <textarea id="textarea-${num}" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Napište veřejnou odpověď zákazníkovi..."></textarea>
+                        <div id="loader-${num}" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10">
+                            <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
+                            <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-3 mt-4">
+                        <button onclick="cancelEdit('${id}')" class="text-sm font-medium text-gray-500 hover:text-gray-700 transition">Zrušit</button>
+                        <button onclick="submitReply('${id}', '${actionsId}')" class="bg-brand-500 text-white hover:bg-brand-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow-sm">Uložit úpravy</button>
+                    </div>
+                `;
+            }
+            
             box.innerHTML = box.dataset.formHtml;
             
             const textarea = box.querySelector('textarea');
             if (textarea) {
                 textarea.value = box.dataset.currentText || '';
                 textarea.focus();
-            }
-
-            const submitBtn = box.querySelector('button.bg-brand-500');
-            if (submitBtn) {
-                submitBtn.innerText = 'Uložit úpravy';
             }
         }
 
