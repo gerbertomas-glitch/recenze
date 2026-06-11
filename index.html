@@ -26,7 +26,7 @@
         }
     </script>
     <style>
-        body { background-color: #f3f4f6; }
+        body { background-color: #f9fafb; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
@@ -34,8 +34,8 @@
         .card-minimal {
             background-color: #ffffff;
             border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -65,20 +65,28 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
         
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* AI Typing animation */
-        .typing-dot {
-            animation: typing 1.4s infinite ease-in-out;
-            fill: #16a34a;
+        /* Animace pro AI tečky */
+        .typing-indicator span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #16a34a;
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: bounce 1.4s infinite ease-in-out both;
         }
-        .typing-dot:nth-child(1) { animation-delay: 0s; }
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typing {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Vlastní Checkboxy hvězd */
+        .star-cb:checked + div {
+            border-color: #eab308;
+            background-color: #fefce8;
+            color: #ca8a04;
         }
     </style>
 </head>
@@ -88,7 +96,7 @@
     <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-30 hidden md:hidden transition-opacity opacity-0 duration-300"></div>
 
     <!-- LEVÉ MENU -->
-    <aside id="sidebar" class="w-64 bg-surface border-r border-border flex flex-col flex-shrink-0 z-40 fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300">
+    <aside id="sidebar" class="w-64 bg-white border-r border-border flex flex-col flex-shrink-0 z-40 fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300">
         <!-- Logo -->
         <div class="h-16 flex items-center justify-between px-6 border-b border-border shrink-0">
             <img src="https://viewcz.com/images/svg/head-logo.svg" alt="View Logo" class="h-8 object-contain">
@@ -100,12 +108,9 @@
         <!-- Navigace -->
         <nav class="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-1 custom-scrollbar">
             <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Menu</p>
-            
             <a href="dashboard.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition">
                 <i class="fa-solid fa-layer-group w-5 text-center"></i> Přehled
             </a>
-            
-            <!-- AKTIVNÍ SEKCE: FIREMNÍ GOOGLE PROFIL -->
             <div>
                 <button onclick="toggleMenu('gmb-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
                     <div class="flex items-center gap-3">
@@ -114,12 +119,11 @@
                 </button>
                 <div id="gmb-submenu" class="flex flex-col gap-1 pl-11 pr-3 max-h-40 opacity-100 py-1 transition-all duration-300 overflow-hidden">
                     <a href="seznam-profilu.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Seznam profilů</a>
-                    <a href="gmb-prispevky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Google Novinky</a>
                     <a href="gmb-recenze.html" class="block py-1.5 text-sm text-brand-600 font-bold transition">Správa recenzí</a>
+                    <a href="gmb-prispevky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Google Novinky</a>
                     <a href="gmb-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistiky</a>
                 </div>
             </div>
-
             <div>
                 <button onclick="toggleMenu('sv-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
                     <div class="flex items-center gap-3">
@@ -131,7 +135,6 @@
                     <a href="sv-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistika</a>
                 </div>
             </div>
-            
             <div>
                 <button onclick="toggleMenu('nfc-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
                     <div class="flex items-center gap-3">
@@ -143,58 +146,27 @@
                     <a href="nfc-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistika</a>
                 </div>
             </div>
-
-            <div>
-                <button onclick="toggleMenu('ads-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-bullhorn w-5 text-center"></i> Google Ads
-                    </div>
-                </button>
-                <div id="ads-submenu" class="flex flex-col gap-1 pl-11 pr-3 max-h-0 overflow-hidden opacity-0 transition-all duration-300">
-                    <a href="ads-kampane.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Moje kampaně</a>
-                    <a href="ads-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistika</a>
-                </div>
-            </div>
-
             <div class="h-px bg-border my-4 mx-3"></div>
             <a href="nastaveni.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition">
                 <i class="fa-solid fa-gear w-5 text-center"></i> Nastavení
             </a>
         </nav>
-
-        <!-- Kontakt na obchodníka -->
-        <div class="p-4 border-t border-border bg-gray-50">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">Váš obchodník</p>
-            <div class="flex items-center gap-3 mb-3">
-                <img src="https://iili.io/2iP8d1p.png" alt="Tomáš Gerber" class="w-10 h-10 rounded-full object-cover border border-gray-300 shrink-0">
-                <div class="overflow-hidden">
-                    <p class="font-medium text-sm text-gray-900 truncate">Tomáš Gerber</p>
-                    <p class="text-xs text-gray-500 mt-0.5">+420 728 414 452</p>
-                    <p class="text-xs text-gray-500 truncate hover:text-brand-600 transition">gerber@viewcz.com</p>
-                </div>
-            </div>
-            <button onclick="toggleChat()" class="w-full bg-white border border-gray-300 text-gray-700 py-1.5 rounded text-xs font-semibold hover:bg-gray-50 transition shadow-sm mt-1">
-                Napsat zprávu
-            </button>
-        </div>
     </aside>
 
     <!-- HLAVNÍ OBSAH -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden min-w-0">
         
         <!-- HORNÍ LIŠTA -->
-        <header class="h-16 bg-surface border-b border-border flex items-center justify-between px-4 sm:px-8 z-20 shrink-0">
+        <header class="h-16 bg-white border-b border-border flex items-center justify-between px-4 sm:px-8 z-20 shrink-0">
             <div class="flex items-center gap-3">
                 <button onclick="toggleMobileMenu()" class="md:hidden text-gray-500 hover:text-gray-700 transition">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
-                <h1 class="text-lg sm:text-xl font-semibold text-gray-900 tracking-tight truncate">Správa recenzí</h1>
+                <h1 class="text-lg sm:text-xl font-bold text-gray-900 tracking-tight truncate">Správa recenzí</h1>
             </div>
-            
             <div class="flex items-center gap-4 sm:gap-6">
                 <button class="relative text-gray-400 hover:text-gray-600 transition">
                     <i class="fa-regular fa-bell text-xl"></i>
-                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-surface"></span>
                 </button>
                 <div class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
                     <div class="text-right hidden sm:block">
@@ -206,432 +178,447 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto relative bg-gray-100 custom-scrollbar flex flex-col">
+        <!-- HLAVNÍ PLOCHA -->
+        <main class="flex-1 overflow-y-auto relative bg-white custom-scrollbar flex flex-col">
             
-            <!-- TOP FIXNÍ LIŠTA (Taby) -->
-            <div class="bg-white border-b border-gray-200 shrink-0 z-10 sticky top-0 shadow-sm pt-4">
-                <div class="max-w-7xl mx-auto px-4 sm:px-8 flex justify-between items-end">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Recenze z Google profilů</h2>
-                        <p class="text-sm text-gray-500 mt-1 mb-4">Odpovídejte klientům, nahlašujte spam a nastavte si automatizaci pomocí AI.</p>
-                    </div>
-                    <div class="hidden md:flex gap-3 mb-4">
-                        <button onclick="showToast('Aktualizuji data z Google API...')" class="bg-white border border-gray-300 text-gray-700 h-[38px] px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm flex items-center gap-2 shrink-0">
+            <!-- HORNÍ HLAVIČKA A TABS -->
+            <div class="bg-white px-4 sm:px-8 pt-6 border-b border-gray-200 shrink-0 sticky top-0 z-10">
+                <div class="max-w-5xl mx-auto">
+                    
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Recenze z Google profilů</h2>
+                            <p class="text-sm text-gray-500 mt-1">Odpovídejte klientům, nahlašujte spam a nastavte si automatizaci pomocí AI.</p>
+                        </div>
+                        <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm flex items-center gap-2">
                             <i class="fa-solid fa-rotate-right"></i> Synchronizovat
                         </button>
                     </div>
-                </div>
-                
-                <div class="max-w-7xl mx-auto flex overflow-x-auto hide-scrollbar px-4 sm:px-8">
-                    <button onclick="switchTab('tab-inbox')" id="btn-tab-inbox" class="whitespace-nowrap py-3 px-5 border-b-2 font-bold text-sm transition-colors border-brand-500 text-brand-600">
-                        <i class="fa-solid fa-inbox mr-2"></i> Přijaté recenze
-                    </button>
-                    <button onclick="switchTab('tab-ai')" id="btn-tab-ai" class="whitespace-nowrap py-3 px-5 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        <i class="fa-solid fa-robot mr-2"></i> Automatizace & AI
-                    </button>
-                    <button onclick="switchTab('tab-alerts')" id="btn-tab-alerts" class="whitespace-nowrap py-3 px-5 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        <i class="fa-regular fa-bell mr-2"></i> Upozornění
-                    </button>
+
+                    <!-- Záložky -->
+                    <div class="flex overflow-x-auto hide-scrollbar gap-6">
+                        <button onclick="switchTab('tab-inbox')" id="btn-tab-inbox" class="whitespace-nowrap pb-3 border-b-2 font-bold text-sm transition-colors border-brand-500 text-brand-600 flex items-center gap-2">
+                            <i class="fa-solid fa-inbox"></i> Přijaté recenze
+                        </button>
+                        <button onclick="switchTab('tab-sablony')" id="btn-tab-sablony" class="whitespace-nowrap pb-3 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 flex items-center gap-2">
+                            <i class="fa-regular fa-comment-dots"></i> Šablony odpovědí
+                        </button>
+                        <button onclick="switchTab('tab-ai')" id="btn-tab-ai" class="whitespace-nowrap pb-3 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Automatizace & AI
+                        </button>
+                        <button onclick="switchTab('tab-upozorneni')" id="btn-tab-upozorneni" class="whitespace-nowrap pb-3 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 flex items-center gap-2">
+                            <i class="fa-regular fa-bell"></i> Upozornění
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- OBSAH TABŮ -->
-            <div class="p-4 sm:p-8 max-w-7xl mx-auto w-full">
+            <div class="p-4 sm:p-8 max-w-5xl mx-auto w-full bg-gray-50/30 flex-1">
                 
-                <!-- TAB 1: INBOX (PŘIJATÉ RECENZE) -->
-                <div id="tab-inbox" class="space-y-6 block">
+                <!-- TAB 1: PŘIJATÉ RECENZE (INBOX) -->
+                <div id="tab-inbox" class="block space-y-6">
                     
-                    <!-- KPI Karty -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col justify-between">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Průměrné hodnocení</p>
+                    <!-- KPI KARTY -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="card-minimal p-4 flex flex-col justify-center">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Průměrné hodnocení</p>
                             <div class="flex items-center gap-2">
                                 <p class="text-3xl font-bold text-gray-900">4.8</p>
                                 <i class="fa-solid fa-star text-yellow-400 text-2xl"></i>
                             </div>
                         </div>
-                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col justify-between">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Všech recenzí</p>
+                        <div class="card-minimal p-4 flex flex-col justify-center">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Všech recenzí</p>
                             <p class="text-3xl font-bold text-gray-900">1,245</p>
                         </div>
-                        <div class="bg-white border border-blue-200 bg-blue-50/50 rounded-xl p-4 shadow-sm flex flex-col justify-between relative overflow-hidden">
-                            <div class="absolute left-0 top-0 w-1 h-full bg-blue-500"></div>
-                            <p class="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-2">Čeká na odpověď</p>
+                        <div class="card-minimal p-4 flex flex-col justify-center relative overflow-hidden border-l-4 border-l-blue-500">
+                            <p class="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1">Čeká na odpověď</p>
                             <p class="text-3xl font-bold text-gray-900">12</p>
                         </div>
-                        <div class="bg-white border border-orange-200 bg-orange-50/50 rounded-xl p-4 shadow-sm flex flex-col justify-between relative overflow-hidden">
-                            <div class="absolute left-0 top-0 w-1 h-full bg-orange-500"></div>
-                            <p class="text-[10px] font-bold text-orange-600 uppercase tracking-wider mb-2">Nahlášeno Googlu</p>
+                        <div class="card-minimal p-4 flex flex-col justify-center relative overflow-hidden border-l-4 border-l-orange-500">
+                            <p class="text-[10px] font-bold text-orange-600 uppercase tracking-wider mb-1">Nahlášeno Googlu</p>
                             <p class="text-3xl font-bold text-gray-900">3</p>
                         </div>
                     </div>
 
-                    <!-- Filtry Inboxu -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
-                        <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
-                            <button class="px-4 py-1.5 bg-gray-100 text-gray-900 text-sm font-bold rounded-lg border border-gray-200 shrink-0 transition">Všechny</button>
-                            <button class="px-4 py-1.5 bg-white text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-lg border border-transparent hover:border-gray-200 shrink-0 transition">Neodpovězené</button>
-                            <button class="px-4 py-1.5 bg-white text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-lg border border-transparent hover:border-gray-200 shrink-0 transition">Odpovězené</button>
+                    <!-- FILTRAČNÍ LIŠTA -->
+                    <div class="card-minimal p-2 flex flex-col md:flex-row justify-between items-center gap-4 bg-white">
+                        <div class="flex gap-1 w-full md:w-auto bg-gray-100 p-1 rounded-lg">
+                            <button onclick="filterStatus('all', this)" class="inbox-status-btn px-4 py-1.5 text-sm font-bold bg-white text-gray-900 rounded shadow-sm transition whitespace-nowrap">Všechny</button>
+                            <button onclick="filterStatus('unanswered', this)" class="inbox-status-btn px-4 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 rounded transition whitespace-nowrap">Neodpovězené</button>
+                            <button onclick="filterStatus('answered', this)" class="inbox-status-btn px-4 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 rounded transition whitespace-nowrap">Odpovězené</button>
                         </div>
+                        
                         <div class="flex items-center gap-3 w-full md:w-auto">
+                            <!-- Hodnocení (Dummy select) -->
                             <div class="relative w-full md:w-48">
-                                <select class="input-minimal py-2 text-sm appearance-none pr-8">
-                                    <option value="all">Všechna hodnocení</option>
-                                    <option value="5">5 hvězdiček</option>
-                                    <option value="4">4 hvězdičky</option>
-                                    <option value="3">3 hvězdičky</option>
-                                    <option value="2">2 hvězdičky</option>
-                                    <option value="1">1 hvězdička</option>
+                                <select class="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-sm font-medium text-gray-700 appearance-none focus:outline-none focus:border-brand-500">
+                                    <option>Všechna hodnocení</option>
+                                    <option>5 hvězdiček</option>
+                                    <option>1-3 hvězdičky</option>
                                 </select>
-                                <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
+                                <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
                             </div>
-                            <div class="relative w-full md:w-64">
-                                <select class="input-minimal py-2 text-sm appearance-none pr-8">
-                                    <option value="all">Všechny pobočky (10)</option>
-                                    <option value="Praha">Praha 13</option>
-                                    <option value="Brno">Brno</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
+
+                            <!-- Filtr poboček s našeptávačem -->
+                            <div class="relative w-full md:w-64" id="inbox-branch-wrapper">
+                                <div class="bg-white border border-gray-200 rounded-md px-3 py-2 flex items-center cursor-text focus-within:border-brand-500 transition shadow-sm" onclick="toggleInboxBranchDropdown()">
+                                    <input type="text" id="inbox-branch-input" onkeyup="filterInboxBranches()" onclick="event.stopPropagation();" class="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none w-full" placeholder="Vyberte pobočku" value="Všechny pobočky" autocomplete="off">
+                                    <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] ml-2 pointer-events-none"></i>
+                                </div>
+                                <div id="inbox-branch-dropdown" class="absolute right-0 top-full mt-1 w-full md:w-72 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden flex-col overflow-hidden">
+                                    <div class="p-2 border-b border-gray-100 bg-gray-50 shrink-0 flex justify-between items-center">
+                                        <label class="flex items-center gap-2 px-2 cursor-pointer">
+                                            <input type="checkbox" id="inbox-master-cb" onchange="toggleAllInboxBranches(this)" class="w-4 h-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500" checked>
+                                            <span class="text-xs font-bold text-gray-700">Vybrat zobrazené</span>
+                                        </label>
+                                    </div>
+                                    <div class="p-1 max-h-48 overflow-y-auto custom-scrollbar" id="inbox-branch-list">
+                                        <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer transition inbox-opt">
+                                            <input type="checkbox" value="Praha 13" onchange="updateInboxBranchSelection()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 inbox-branch-cb" checked>
+                                            <span class="text-sm text-gray-700">Praha 13</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer transition inbox-opt">
+                                            <input type="checkbox" value="Brno" onchange="updateInboxBranchSelection()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 inbox-branch-cb" checked>
+                                            <span class="text-sm text-gray-700">Brno</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer transition inbox-opt">
+                                            <input type="checkbox" value="Liberec" onchange="updateInboxBranchSelection()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 inbox-branch-cb" checked>
+                                            <span class="text-sm text-gray-700">Liberec</span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- SEZNAM RECENZÍ -->
                     <div class="space-y-4">
                         
-                        <!-- RECENZE 1: Neodpovězená s textem (Ukázka AI) -->
-                        <div class="card-minimal overflow-hidden">
-                            <div class="p-5 sm:p-6">
-                                <div class="flex justify-between items-start mb-4">
-                                    <div class="flex gap-4">
-                                        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg shrink-0">PK</div>
-                                        <div>
-                                            <h4 class="font-bold text-gray-900 text-base">Petr Novák</h4>
-                                            <div class="flex items-center gap-2 mt-1">
-                                                <div class="flex text-yellow-400 text-xs">
-                                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                                                </div>
-                                                <span class="text-xs text-gray-500">• před 2 dny</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:block">Neodpovězeno</span>
-                                </div>
-                                <p class="text-gray-800 text-sm leading-relaxed mb-4">Skvělý přístup a rychlé jednání. Pobočka v Praze mi velmi pomohla s nastavením PPC kampaní. Určitě doporučuji všem, co hledají profesionály.</p>
-                                
-                                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100">
-                                    <p class="text-xs text-gray-500 font-medium"><i class="fa-solid fa-location-dot mr-1"></i> Business Power s.r.o. - Praha 13</p>
-                                    <div class="flex gap-2 w-full sm:w-auto">
-                                        <button onclick="toggleReplyBox('reply-box-1')" class="flex-1 sm:flex-none bg-brand-50 text-brand-600 px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-brand-100 transition border border-brand-200">
-                                            <i class="fa-solid fa-reply mr-1"></i> Odpovědět
-                                        </button>
-                                        <button onclick="reportReviewModal()" class="px-3 py-1.5 bg-white border border-gray-200 text-gray-500 rounded-lg text-sm hover:bg-gray-50 hover:text-red-500 transition" title="Nahlásit recenzi Googlu">
-                                            <i class="fa-solid fa-flag"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Skrytý box pro odpověď -->
-                            <div id="reply-box-1" class="hidden bg-gray-50 border-t border-gray-200 p-5 sm:p-6">
-                                <div class="flex justify-between items-end mb-2">
-                                    <label class="label-minimal !mb-0">Vaše odpověď (veřejná)</label>
-                                    <button onclick="generateAiReply('reply-text-1')" class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-200 hover:bg-brand-100 transition flex items-center gap-1.5">
-                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Doporučení AI
-                                    </button>
-                                </div>
-                                <div class="relative">
-                                    <textarea id="reply-text-1" class="input-minimal w-full min-h-[100px] text-sm leading-relaxed resize-y" placeholder="Napište odpověď zákazníkovi..."></textarea>
-                                    <!-- Animace načítání AI -->
-                                    <div id="ai-loading-1" class="absolute inset-0 bg-white/80 backdrop-blur-sm hidden items-center justify-center rounded-lg border border-transparent">
-                                        <div class="flex items-center gap-2 text-brand-600 font-bold text-sm">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <circle class="typing-dot" cx="4" cy="12" r="3"/>
-                                                <circle class="typing-dot" cx="12" cy="12" r="3"/>
-                                                <circle class="typing-dot" cx="20" cy="12" r="3"/>
-                                            </svg>
-                                            Generuji odpověď...
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center mt-3">
-                                    <button class="text-xs text-gray-500 hover:text-gray-700 font-medium transition"><i class="fa-regular fa-folder-open mr-1"></i> Použít šablonu</button>
-                                    <div class="flex gap-2">
-                                        <button onclick="toggleReplyBox('reply-box-1')" class="px-4 py-1.5 text-sm text-gray-600 font-medium hover:bg-gray-200 rounded transition">Zrušit</button>
-                                        <button onclick="submitReply('reply-box-1')" class="px-5 py-1.5 bg-brand-500 text-white text-sm font-bold rounded shadow-sm hover:bg-brand-600 transition">Odeslat</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- RECENZE 2: Špatná recenze -->
-                        <div class="card-minimal overflow-hidden">
-                            <div class="p-5 sm:p-6">
-                                <div class="flex justify-between items-start mb-4">
-                                    <div class="flex gap-4">
-                                        <img src="https://placehold.co/100x100/e2e8f0/64748b?text=MJ" class="w-12 h-12 rounded-full object-cover shrink-0">
-                                        <div>
-                                            <h4 class="font-bold text-gray-900 text-base">Martin Jílek</h4>
-                                            <div class="flex items-center gap-2 mt-1">
-                                                <div class="flex text-yellow-400 text-xs">
-                                                    <i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i>
-                                                </div>
-                                                <span class="text-xs text-gray-500">• před týdnem</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:block">Neodpovězeno</span>
-                                </div>
-                                <p class="text-gray-800 text-sm leading-relaxed mb-4">Byl jsem domluvený na schůzku v Brně na 10:00. Dorazil jsem včas, ale nikdo tam nebyl. Čekal jsem 20 minut a pak jsem to vzdal. Velmi neprofesionální.</p>
-                                
-                                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100">
-                                    <p class="text-xs text-gray-500 font-medium"><i class="fa-solid fa-location-dot mr-1"></i> Business Power s.r.o. - Brno</p>
-                                    <div class="flex gap-2 w-full sm:w-auto">
-                                        <button onclick="toggleReplyBox('reply-box-2')" class="flex-1 sm:flex-none bg-brand-50 text-brand-600 px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-brand-100 transition border border-brand-200">
-                                            <i class="fa-solid fa-reply mr-1"></i> Odpovědět
-                                        </button>
-                                        <button onclick="reportReviewModal()" class="px-3 py-1.5 bg-white border border-gray-200 text-gray-500 rounded-lg text-sm hover:bg-gray-50 hover:text-red-500 transition" title="Nahlásit recenzi Googlu">
-                                            <i class="fa-solid fa-flag"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Skrytý box pro odpověď 2 -->
-                            <div id="reply-box-2" class="hidden bg-gray-50 border-t border-gray-200 p-5 sm:p-6">
-                                <div class="flex justify-between items-end mb-2">
-                                    <label class="label-minimal !mb-0">Vaše odpověď (veřejná)</label>
-                                    <button onclick="generateAiReply('reply-text-2', 'negative')" class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-200 hover:bg-brand-100 transition flex items-center gap-1.5">
-                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Doporučení AI
-                                    </button>
-                                </div>
-                                <div class="relative">
-                                    <textarea id="reply-text-2" class="input-minimal w-full min-h-[100px] text-sm leading-relaxed resize-y" placeholder="Napište odpověď zákazníkovi..."></textarea>
-                                    <div id="ai-loading-2" class="absolute inset-0 bg-white/80 backdrop-blur-sm hidden items-center justify-center rounded-lg border border-transparent">
-                                        <div class="flex items-center gap-2 text-brand-600 font-bold text-sm">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <circle class="typing-dot" cx="4" cy="12" r="3"/>
-                                                <circle class="typing-dot" cx="12" cy="12" r="3"/>
-                                                <circle class="typing-dot" cx="20" cy="12" r="3"/>
-                                            </svg>
-                                            Generuji omluvu...
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center mt-3">
-                                    <button class="text-xs text-gray-500 hover:text-gray-700 font-medium transition"><i class="fa-regular fa-folder-open mr-1"></i> Použít šablonu</button>
-                                    <div class="flex gap-2">
-                                        <button onclick="toggleReplyBox('reply-box-2')" class="px-4 py-1.5 text-sm text-gray-600 font-medium hover:bg-gray-200 rounded transition">Zrušit</button>
-                                        <button onclick="submitReply('reply-box-2')" class="px-5 py-1.5 bg-brand-500 text-white text-sm font-bold rounded shadow-sm hover:bg-brand-600 transition">Odeslat</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- RECENZE 3: Odpovězená (Pouze hodnocení) -->
-                        <div class="card-minimal overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
-                            <div class="p-5 sm:p-6">
-                                <div class="flex justify-between items-start mb-4">
-                                    <div class="flex gap-4">
-                                        <div class="w-12 h-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-lg shrink-0">EK</div>
-                                        <div>
-                                            <h4 class="font-bold text-gray-900 text-base">Eva Králová</h4>
-                                            <div class="flex items-center gap-2 mt-1">
-                                                <div class="flex text-yellow-400 text-xs">
-                                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                                                </div>
-                                                <span class="text-xs text-gray-500">• před 2 týdny</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-0.5 bg-green-50 text-green-600 border border-green-100 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:block">Odpovězeno</span>
-                                </div>
-                                <p class="text-gray-500 text-sm italic mb-4">Uživatel nezanechal textové hodnocení.</p>
-                                
-                                <div class="bg-gray-50 border-l-4 border-brand-500 p-3 sm:p-4 rounded-r-lg mb-4">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <i class="fa-solid fa-reply text-brand-600 text-xs"></i>
-                                        <p class="text-xs font-bold text-gray-900">Odpověď od vlastníka <span class="font-normal text-gray-500 ml-2">(Automatická odpověď)</span></p>
-                                    </div>
-                                    <p class="text-sm text-gray-800 leading-relaxed">Dobrý den, Evo, moc děkujeme za úžasné hodnocení 5 hvězdiček! Jsme rádi, že jste byla spokojená. Budeme se těšit na další spolupráci.</p>
-                                    <div class="flex gap-3 mt-2">
-                                        <button class="text-xs text-gray-500 hover:text-brand-600 font-medium transition">Upravit</button>
-                                        <button class="text-xs text-gray-500 hover:text-red-500 font-medium transition">Smazat odpověď</button>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-                                    <p class="text-xs text-gray-500 font-medium"><i class="fa-solid fa-location-dot mr-1"></i> Business Power s.r.o. - Liberec</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    
-                    <div class="text-center pt-4">
-                        <button class="bg-white border border-gray-300 text-gray-700 py-2 px-6 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm">Načíst další recenze</button>
-                    </div>
-                </div>
-
-                <!-- TAB 2: AUTOMATIZACE & AI -->
-                <div id="tab-ai" class="hidden space-y-8">
-                    
-                    <div class="flex justify-between items-end mb-2">
-                        <div>
-                            <h3 class="font-bold text-gray-900 text-lg">Chytrá správa recenzí</h3>
-                            <p class="text-sm text-gray-500 mt-1">Ušetřete čas a nechte systém, aby odpovídal na jednoduché recenze za vás, nebo vám připravil koncepty u těch složitějších.</p>
-                        </div>
-                    </div>
-
-                    <!-- BLOK: Auto-odpovědi na 5 hvězd bez textu -->
-                    <div class="card-minimal overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 flex justify-between items-start bg-gray-50">
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-base mb-1">Automatické odpovědi (5 hvězd bez textu)</h4>
-                                <p class="text-sm text-gray-500 max-w-2xl">Systém automaticky odpoví jménem vaší firmy na pětihvězdičkové recenze, u kterých klient nezanechal žádný text. Aby odpovědi nepůsobily jako robot, systém je náhodně střídá z vašich šablon níže.</p>
-                            </div>
-                            <label class="flex items-center cursor-pointer ml-4 mt-1">
-                                <div class="relative">
-                                    <input type="checkbox" class="sr-only" checked>
-                                    <div class="block bg-brand-500 w-12 h-7 rounded-full transition-colors"></div>
-                                    <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition transform translate-x-5"></div>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-end mb-4">
-                                <h5 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Aktivní šablony k rotaci</h5>
-                                <button onclick="showToast('Otevírám editor šablony...')" class="text-sm font-bold text-brand-600 hover:text-brand-700 transition"><i class="fa-solid fa-plus mr-1"></i> Přidat šablonu</button>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="border border-gray-200 rounded-lg p-4 bg-white relative group">
-                                    <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
-                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
-                                    </div>
-                                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Šablona 1</p>
-                                    <p class="text-sm text-gray-800 leading-relaxed">Dobrý den, {jmeno_zakaznika}, moc děkujeme za skvělé hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.</p>
-                                </div>
-                                <div class="border border-gray-200 rounded-lg p-4 bg-white relative group">
-                                    <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
-                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
-                                    </div>
-                                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Šablona 2</p>
-                                    <p class="text-sm text-gray-800 leading-relaxed">Zdravíme, {jmeno_zakaznika}. Pět hvězdiček nám udělalo obrovskou radost! Děkujeme za Vaši důvěru a přejeme hezký den. Tým Business Power.</p>
-                                </div>
-                                <div class="border border-gray-200 rounded-lg p-4 bg-white relative group">
-                                    <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
-                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
-                                    </div>
-                                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Šablona 3</p>
-                                    <p class="text-sm text-gray-800 leading-relaxed">Dobrý den, děkujeme za Vaše vynikající hodnocení. Vaše spokojenost je pro nás tou největší odměnou!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- BLOK: AI Asistent -->
-                    <div class="card-minimal overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 flex justify-between items-start">
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-base mb-1"><i class="fa-solid fa-wand-magic-sparkles text-brand-500 mr-1.5"></i> Nastavení AI Asistenta</h4>
-                                <p class="text-sm text-gray-500 max-w-2xl">Zde definujete, jak má umělá inteligence formulovat návrhy odpovědí u recenzí s textem, nebo u negativních hodnocení.</p>
-                            </div>
-                        </div>
-                        <div class="p-6 space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="label-minimal">Tón komunikace AI</label>
-                                    <div class="relative">
-                                        <select class="input-minimal appearance-none pr-8">
-                                            <option value="profesional">Vysoce profesionální a formální (Vykání)</option>
-                                            <option value="friendly" selected>Přátelský a moderní (Vykání, uvolněný)</option>
-                                            <option value="casual">Kamaradský (Tykání)</option>
-                                        </select>
-                                        <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
-                                    </div>
-                                    <p class="text-[10px] text-gray-500 mt-1.5">Ovlivňuje výběr slov a oslovení při generování textu přes AI tlačítko u recenzí.</p>
-                                </div>
-                                <div>
-                                    <label class="label-minimal">Jméno podepisujícího (Volitelné)</label>
-                                    <input type="text" class="input-minimal" value="Tým Business Power">
-                                    <p class="text-[10px] text-gray-500 mt-1.5">Jak se má AI podepisovat na konci odpovědi.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="pt-4 border-t border-gray-100">
-                                <label class="flex items-start gap-3 cursor-pointer group">
-                                    <div class="relative flex items-center justify-center mt-0.5">
-                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors">
-                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
-                                    </div>
+                        <!-- RECENZE 1 (Neodpovězeno) -->
+                        <div class="card-minimal p-6 review-item" data-status="unanswered" data-branch="Praha 13">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">PK</div>
                                     <div>
-                                        <p class="text-sm font-bold text-gray-900">Automaticky generovat a ukládat koncepty (Drafts) pro 1-4 hvězdičkové recenze</p>
-                                        <p class="text-xs text-gray-500 mt-1 max-w-2xl leading-relaxed">Pokud je zaškrtnuto, jakmile dorazí nová recenze s textem, AI si ji na pozadí přečte a rovnou do okénka připraví návrh odpovědi. Vy pak jen přijdete, zkontrolujete text a kliknete na Odeslat.</p>
+                                        <h4 class="font-bold text-gray-900 text-sm">Petr Novák</h4>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <div class="flex text-yellow-400 text-[10px]">
+                                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i>
+                                            </div>
+                                            <span class="text-xs text-gray-400">• před 2 dny</span>
+                                        </div>
                                     </div>
+                                </div>
+                                <span class="px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] font-bold uppercase tracking-wider border border-blue-100">Neodpovězeno</span>
+                            </div>
+                            
+                            <p class="text-sm text-gray-800 mb-6">Skvělý přístup a rychlé jednání. Pobočka v Praze mi velmi pomohla s nastavením PPC kampaní. Určitě doporučuji všem, co hledají profesionály.</p>
+                            
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-t border-gray-100 pt-4 gap-4">
+                                <p class="text-[11px] font-medium text-gray-500 flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Business Power s.r.o. - Praha 13</p>
+                                <div class="flex items-center justify-end gap-2 w-full sm:w-auto">
+                                    <button onclick="openReportModal()" class="border border-gray-200 text-gray-500 px-3 py-1.5 rounded-md text-xs hover:bg-gray-50 transition shadow-sm" title="Nahlásit jako nevhodné">
+                                        <i class="fa-solid fa-flag"></i>
+                                    </button>
+                                    <button onclick="openReply('reply-1')" class="border border-brand-200 text-brand-600 bg-green-50 px-4 py-1.5 rounded-md text-xs font-bold hover:bg-brand-100 transition flex items-center gap-2 shadow-sm">
+                                        <i class="fa-solid fa-reply"></i> Odpovědět
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Otevřený box pro odpověď -->
+                            <div id="reply-1" class="hidden mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 relative">
+                                <div class="flex justify-between items-center mb-2">
+                                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Vaše odpověď (veřejná)</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="openTemplateModal('textarea-1')" class="text-[10px] font-bold text-gray-600 bg-white border border-gray-200 px-2.5 py-1.5 rounded hover:bg-gray-50 transition flex items-center gap-1.5 shadow-sm">
+                                            <i class="fa-regular fa-copy"></i> Použít šablonu
+                                        </button>
+                                        <button onclick="generateAI('textarea-1', 'loader-1')" class="text-[10px] font-bold text-white bg-brand-500 px-2.5 py-1.5 rounded hover:bg-brand-600 transition flex items-center gap-1.5 shadow-sm">
+                                            <i class="fa-solid fa-wand-magic-sparkles"></i> Doporučení AI
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <textarea id="textarea-1" class="w-full bg-white border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-shadow min-h-[100px]" placeholder="Napište odpověď zákazníkovi..."></textarea>
+                                    
+                                    <!-- AI Loading Animace (Překryv textarey) -->
+                                    <div id="loader-1" class="absolute inset-0 bg-white/95 backdrop-blur-[1px] rounded-md z-10 flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-300 border border-brand-200">
+                                        <div class="typing-indicator flex items-center justify-center mb-2"><span></span><span></span><span></span></div>
+                                        <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end items-center mt-3 gap-3">
+                                    <button onclick="closeReply('reply-1')" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition">Zrušit</button>
+                                    <button onclick="submitReply('reply-1')" class="bg-brand-500 text-white px-5 py-2 rounded-md text-sm font-bold hover:bg-brand-600 transition shadow-sm">Odeslat</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RECENZE 2 (Odpovězeno) -->
+                        <div class="card-minimal p-6 review-item" data-status="answered" data-branch="Brno">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-sm">MS</div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900 text-sm">Marie Svobodová</h4>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <div class="flex text-yellow-400 text-[10px]">
+                                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                            </div>
+                                            <span class="text-xs text-gray-400">• před týdnem</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-gray-800 mb-6">Super domluva a rychlá realizace. Děkuji!</p>
+                            
+                            <!-- Odeslaná odpověď -->
+                            <div class="bg-gray-50 border-l-2 border-brand-500 p-4 rounded-r-lg mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <p class="text-xs font-bold text-brand-700">Vaše odpověď (Tým Business Power)</p>
+                                    <p class="text-[10px] text-gray-500">Před 6 dny</p>
+                                </div>
+                                <p class="text-sm text-gray-700">Dobrý den, Marie, moc děkujeme za krásných 5 hvězdiček! Jsme rádi, že jste byla spokojená a budeme se těšit na další spolupráci.</p>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-t border-gray-100 pt-4 gap-4">
+                                <p class="text-[11px] font-medium text-gray-500 flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Business Power s.r.o. - Brno</p>
+                                <div class="flex items-center justify-end gap-2 w-full sm:w-auto">
+                                    <button onclick="openReply('reply-2')" class="border border-gray-200 text-gray-600 px-4 py-1.5 rounded-md text-xs font-bold hover:bg-gray-50 transition flex items-center gap-2 shadow-sm">
+                                        <i class="fa-solid fa-pen"></i> Upravit odpověď
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="reply-2" class="hidden mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 relative">
+                                <div class="flex justify-between items-center mb-2">
+                                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Úprava odpovědi</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="openTemplateModal('textarea-2')" class="text-[10px] font-bold text-gray-600 bg-white border border-gray-200 px-2.5 py-1.5 rounded hover:bg-gray-50 transition flex items-center gap-1.5 shadow-sm">
+                                            <i class="fa-regular fa-copy"></i> Použít šablonu
+                                        </button>
+                                        <button onclick="generateAI('textarea-2', 'loader-2')" class="text-[10px] font-bold text-white bg-brand-500 px-2.5 py-1.5 rounded hover:bg-brand-600 transition flex items-center gap-1.5 shadow-sm">
+                                            <i class="fa-solid fa-wand-magic-sparkles"></i> Doporučení AI
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="textarea-2" class="w-full bg-white border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:border-brand-500 min-h-[100px]">Dobrý den, Marie, moc děkujeme za krásných 5 hvězdiček! Jsme rádi, že jste byla spokojená a budeme se těšit na další spolupráci.</textarea>
+                                    <div id="loader-2" class="absolute inset-0 bg-white/95 backdrop-blur-[1px] rounded-md z-10 flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-300 border border-brand-200">
+                                        <div class="typing-indicator flex items-center justify-center mb-2"><span></span><span></span><span></span></div>
+                                        <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end items-center mt-3 gap-3">
+                                    <button onclick="closeReply('reply-2')" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition">Zrušit</button>
+                                    <button onclick="submitReply('reply-2')" class="bg-brand-500 text-white px-5 py-2 rounded-md text-sm font-bold hover:bg-brand-600 transition shadow-sm">Aktualizovat</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- TAB 2: ŠABLONY ODPOVĚDÍ (NOVÉ) -->
+                <div id="tab-sablony" class="hidden space-y-6">
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-lg">Globální šablony odpovědí</h3>
+                            <p class="text-sm text-gray-500 mt-1">Definujte si předpřipravené texty. Pokud jich zadáte více ke stejnému hodnocení, automatizace je bude při odesílání náhodně střídat.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bloky pro různé hvězdičky -->
+                    <div class="space-y-6">
+                        
+                        <!-- 5 hvězd -->
+                        <div class="card-minimal overflow-hidden">
+                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                    <h4 class="font-bold text-gray-900">Šablony pro 5 hvězdiček</h4>
+                                </div>
+                                <button onclick="showToast('Otevře se okno pro přidání nové šablony')" class="text-sm font-bold text-brand-600 hover:text-brand-700 transition flex items-center gap-1"><i class="fa-solid fa-plus"></i> Přidat</button>
+                            </div>
+                            <div class="p-6 space-y-3">
+                                <div class="border border-gray-200 rounded-lg p-4 bg-white flex justify-between items-start gap-4 shadow-sm">
+                                    <p class="text-sm text-gray-800 flex-1">Dobrý den, moc děkujeme za úžasné hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.</p>
+                                    <div class="flex gap-2 shrink-0">
+                                        <button class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4 bg-white flex justify-between items-start gap-4 shadow-sm">
+                                    <p class="text-sm text-gray-800 flex-1">Zdravíme, pět hvězdiček nám udělalo obrovskou radost! Děkujeme za Vaši důvěru a přejeme hezký den. Tým Business Power.</p>
+                                    <div class="flex gap-2 shrink-0">
+                                        <button class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4 hvězdy -->
+                        <div class="card-minimal overflow-hidden">
+                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i></div>
+                                    <h4 class="font-bold text-gray-900">Šablony pro 4 hvězdičky</h4>
+                                </div>
+                                <button class="text-sm font-bold text-brand-600 hover:text-brand-700 transition flex items-center gap-1"><i class="fa-solid fa-plus"></i> Přidat</button>
+                            </div>
+                            <div class="p-6 space-y-3">
+                                <div class="border border-gray-200 rounded-lg p-4 bg-white flex justify-between items-start gap-4 shadow-sm">
+                                    <p class="text-sm text-gray-800 flex-1">Dobrý den, děkujeme za Vaše vysoké hodnocení a zpětnou vazbu. Neustále pracujeme na zlepšení našich služeb, aby to příště bylo na plný počet.</p>
+                                    <div class="flex gap-2 shrink-0">
+                                        <button class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 1-3 hvězdy -->
+                        <div class="card-minimal overflow-hidden">
+                            <div class="bg-red-50/30 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex text-yellow-400 text-lg"><i class="fa-solid fa-star text-red-400"></i><i class="fa-solid fa-star text-red-400"></i><i class="fa-solid fa-star text-red-400"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i></div>
+                                    <h4 class="font-bold text-gray-900">Krizová komunikace (1-3 hvězdy)</h4>
+                                </div>
+                                <button class="text-sm font-bold text-brand-600 hover:text-brand-700 transition flex items-center gap-1"><i class="fa-solid fa-plus"></i> Přidat</button>
+                            </div>
+                            <div class="p-6 space-y-3">
+                                <div class="border border-gray-200 rounded-lg p-4 bg-white flex justify-between items-start gap-4 shadow-sm">
+                                    <p class="text-sm text-gray-800 flex-1">Dobrý den, velmi nás mrzí, že Vaše zkušenost nebyla podle Vašich představ. Rádi bychom situaci vyřešili. Prosím, kontaktujte nás na info@businesspower.cz nebo telefonu.</p>
+                                    <div class="flex gap-2 shrink-0">
+                                        <button class="text-gray-400 hover:text-brand-600 transition"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- TAB 3: AUTOMATIZACE & AI (NÁSTĚNKA PRAVIDEL) -->
+                <div id="tab-ai" class="hidden space-y-6">
+                    
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-lg">Pravidla automatizace a AI</h3>
+                            <p class="text-sm text-gray-500 mt-1">Propojte si pobočky s vašimi šablonami, nebo to nechte kompletně na AI Asistentovi.</p>
+                        </div>
+                        <button onclick="openAutomationModal()" class="bg-brand-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-600 transition shadow-sm flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Nové pravidlo
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="automation-rules-container">
+                        <!-- Karta 1: Pravidlo ze šablon -->
+                        <div class="card-minimal p-6 flex flex-col h-full relative group bg-white hover:border-brand-300">
+                            <div class="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="openAutomationModal()" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition" title="Upravit"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="this.closest('.card-minimal').remove(); showToast('Pravidlo bylo smazáno')" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition" title="Smazat"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-regular fa-copy"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-base leading-tight">Děkování klientům</h4>
+                                    <p class="text-[10px] text-brand-600 font-bold uppercase tracking-wider mt-0.5">Rotace Šablon</p>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-1">
+                                <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Aktivní pro pobočky:</strong> Praha 13, Brno</p>
+                                <p class="text-sm text-gray-600"><strong class="text-gray-900">Kdy odeslat:</strong> 4 a 5 hvězdiček bez textu.</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                <label class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" checked>
+                                        <div class="block bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                                    </div>
+                                    <span class="ml-2 text-xs font-bold text-gray-700">Aktivní</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Karta 2: AI Asistent -->
+                        <div class="card-minimal p-6 flex flex-col h-full relative group bg-white hover:border-brand-300">
+                            <div class="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="openAutomationModal()" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition" title="Upravit"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="this.closest('.card-minimal').remove(); showToast('Pravidlo bylo smazáno')" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition" title="Smazat"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-base leading-tight">Chytrá odpověď na text</h4>
+                                    <p class="text-[10px] text-purple-600 font-bold uppercase tracking-wider mt-0.5">AI Asistent</p>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-1">
+                                <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Aktivní pro:</strong> Všechny pobočky (3)</p>
+                                <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Kdy odeslat:</strong> 4 a 5 hvězdiček s textem.</p>
+                                <p class="text-sm text-gray-600"><strong class="text-gray-900">Tón:</strong> Přátelský a moderní</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                <label class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" checked>
+                                        <div class="block bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                                    </div>
+                                    <span class="ml-2 text-xs font-bold text-gray-700">Aktivní</span>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 3: UPOZORNĚNÍ -->
-                <div id="tab-alerts" class="hidden space-y-6">
-                    <div class="card-minimal p-6">
-                        <h4 class="font-bold text-gray-900 text-base mb-1">Notifikace a Upozornění</h4>
-                        <p class="text-sm text-gray-500 max-w-2xl mb-6">Mějte přehled o tom, co si o vás zákazníci myslí. Nastavte si e-mailová upozornění, abyste mohli rychle reagovat na zpětnou vazbu.</p>
-                        
-                        <div class="space-y-4">
-                            
-                            <div class="p-4 border border-gray-200 rounded-lg hover:border-brand-300 transition bg-white">
-                                <label class="flex items-start gap-4 cursor-pointer">
-                                    <div class="relative flex items-center justify-center mt-1">
-                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors" checked>
-                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-sm font-bold text-gray-900">Krizové upozornění (1 až 3 hvězdičky)</p>
-                                        <p class="text-xs text-gray-500 mt-1">Okamžitě pošleme e-mail, jakmile někdo udělí průměrné nebo špatné hodnocení na jakékoliv pobočce. Rychlá reakce může zachránit vztah se zákazníkem.</p>
-                                        <div class="mt-3 flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-gray-400"></i>
-                                            <input type="email" class="text-sm border-b border-gray-300 focus:outline-none focus:border-brand-500 pb-1 w-64 text-gray-700 bg-transparent" value="jan.novak@businesspower.cz">
-                                        </div>
+                <!-- TAB 4: UPOZORNĚNÍ -->
+                <div id="tab-upozorneni" class="hidden space-y-6">
+                    <div class="max-w-2xl">
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">Notifikace a upozornění</h3>
+                        <p class="text-sm text-gray-500 mb-6">Nastavte si, o jakých recenzích chcete být informováni e-mailem.</p>
+
+                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm divide-y divide-gray-100">
+                            <div class="p-5 flex items-center justify-between hover:bg-gray-50 transition">
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900">Každá nová recenze</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Upozornění do e-mailu při každém novém hodnocení.</p>
+                                </div>
+                                <label class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only">
+                                        <div class="block bg-gray-200 w-10 h-6 rounded-full transition-colors"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform"></div>
                                     </div>
                                 </label>
                             </div>
-
-                            <div class="p-4 border border-gray-200 rounded-lg hover:border-brand-300 transition bg-white">
-                                <label class="flex items-start gap-4 cursor-pointer">
-                                    <div class="relative flex items-center justify-center mt-1">
-                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors">
-                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-sm font-bold text-gray-900">Nová recenze (Jakákoliv)</p>
-                                        <p class="text-xs text-gray-500 mt-1">Dostávejte upozornění úplně na každou novou recenzi (včetně 4 a 5 hvězdiček).</p>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div class="p-4 border border-gray-200 rounded-lg hover:border-brand-300 transition bg-white">
-                                <label class="flex items-start gap-4 cursor-pointer">
-                                    <div class="relative flex items-center justify-center mt-1">
-                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors" checked>
-                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-sm font-bold text-gray-900">Týdenní souhrn (Souhrn)</p>
-                                        <p class="text-xs text-gray-500 mt-1">Každé pondělí ráno Vám zašleme souhrnný report o počtu nových recenzí, změnách v průměrném hodnocení a kolik z nich čeká na odpověď.</p>
+                            <div class="p-5 flex items-center justify-between bg-red-50/30 hover:bg-red-50/50 transition">
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900">Negativní recenze (1-3 hvězdy)</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Okamžité upozornění na špatnou zpětnou vazbu.</p>
+                                </div>
+                                <label class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" checked>
+                                        <div class="block bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform translate-x-4"></div>
                                     </div>
                                 </label>
                             </div>
-
-                        </div>
-                        
-                        <div class="mt-6 pt-4 border-t border-gray-100">
-                            <button onclick="showToast('Nastavení upozornění bylo uloženo')" class="px-6 py-2 bg-brand-500 text-white text-sm font-bold rounded-lg shadow-sm hover:bg-brand-600 transition">Uložit nastavení</button>
                         </div>
                     </div>
                 </div>
@@ -640,38 +627,237 @@
         </main>
     </div>
 
+    <!-- === MODÁLNÍ OKNA === -->
+
+    <!-- MODAL PRO ŠABLONY ODPOVĚDÍ V INBOXU -->
+    <div id="template-modal" class="fixed inset-0 bg-gray-900/60 z-[70] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
+                <h3 class="text-lg font-bold text-gray-900"><i class="fa-regular fa-copy text-blue-500 mr-2"></i> Vybrat šablonu z knihovny</h3>
+                <button onclick="closeTemplateModal()" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-80 custom-scrollbar space-y-3">
+                <button onclick="applyTemplate('Dobrý den, moc děkujeme za skvělé hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.')" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-brand-500 hover:bg-green-50 transition group shadow-sm">
+                    <p class="font-bold text-sm text-gray-900 mb-1 group-hover:text-brand-700">Poděkování (5 hvězd)</p>
+                    <p class="text-sm text-gray-600 line-clamp-2">Dobrý den, moc děkujeme za skvělé hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.</p>
+                </button>
+                <button onclick="applyTemplate('Dobrý den, děkujeme za hodnocení. Velmi nás mrzí, že Vaše zkušenost nebyla ideální. Prosím, kontaktujte nás na info@firma.cz, rádi s Vámi situaci vyřešíme.')" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-brand-500 hover:bg-green-50 transition group shadow-sm">
+                    <p class="font-bold text-sm text-gray-900 mb-1 group-hover:text-brand-700">Omluva (Krizová komunikace)</p>
+                    <p class="text-sm text-gray-600 line-clamp-2">Dobrý den, děkujeme za hodnocení. Velmi nás mrzí, že Vaše zkušenost nebyla ideální. Prosím, kontaktujte nás na info@firma.cz, rádi s Vámi situaci vyřešíme.</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL PRO NAHLÁŠENÍ RECENZE -->
-    <div id="report-modal" class="fixed inset-0 bg-gray-900/60 z-[60] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4">
+    <div id="report-modal" class="fixed inset-0 bg-gray-900/60 z-[70] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fa-solid fa-flag text-red-500"></i> Nahlásit recenzi Googlu</h3>
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fa-solid fa-flag text-red-500"></i> Nahlásit recenzi</h3>
                 <button onclick="closeReportModal()" class="text-gray-400 hover:text-gray-600 transition">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
             <div class="p-6">
-                <p class="text-sm text-gray-600 mb-4 leading-relaxed">Společnost Google recenze nemaže jen tak. Musíte prokázat, že recenze porušuje jejich zásady (např. spam, falešný obsah, střet zájmů, nevhodný jazyk).</p>
+                <p class="text-sm text-gray-600 mb-4 leading-relaxed">Společnost Google recenze nemaže jen tak. Musíte prokázat, že recenze porušuje jejich zásady (např. spam, falešný obsah, střet zájmů).</p>
                 
                 <label class="label-minimal">Důvod nahlášení</label>
                 <div class="relative mb-4">
                     <select class="input-minimal appearance-none pr-8 text-sm py-2.5">
                         <option>Tato recenze nepatří k mojí firmě</option>
-                        <option>Spam nebo falešná recenze (Bot)</option>
-                        <option>Střet zájmů (Napsal ji konkurent/bývalý zaměstnanec)</option>
+                        <option>Spam nebo falešná recenze</option>
+                        <option>Střet zájmů</option>
                         <option>Nevhodný jazyk nebo nenávistný obsah</option>
-                        <option>Osobní útok nebo šikana</option>
                     </select>
                     <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
                 </div>
                 
                 <div class="bg-orange-50 border border-orange-200 p-3 rounded-lg flex gap-3">
                     <i class="fa-solid fa-circle-info text-orange-500 mt-0.5"></i>
-                    <p class="text-xs text-orange-800">Po odeslání požadavku přes API bude Google tuto recenzi zkoumat. Schvalovací proces trvá obvykle 3–7 pracovních dní. Do té doby recenze zůstává viditelná.</p>
+                    <p class="text-xs text-orange-800">Schvalovací proces trvá obvykle 3–7 pracovních dní. Do té doby recenze zůstává viditelná.</p>
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3 shrink-0">
                 <button onclick="closeReportModal()" class="px-5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition shadow-sm">Zrušit</button>
                 <button onclick="submitReport()" class="px-5 py-2 rounded-lg text-sm font-bold text-white bg-red-500 hover:bg-red-600 transition shadow-sm">Odeslat Googlu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZCELA NOVÝ MODAL PRO NASTAVENÍ AUTOMATIZACE (Pravidla) -->
+    <div id="automation-modal" class="fixed inset-0 bg-gray-900/60 z-[60] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
+                <h3 class="text-lg font-bold text-gray-900">Nové pravidlo automatizace</h3>
+                <button onclick="closeAutomationModal()" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 custom-scrollbar space-y-8 pb-20">
+
+                <!-- 1. Pobočky -->
+                <div>
+                    <h4 class="font-bold text-gray-900 text-sm mb-3 border-b border-gray-100 pb-2">1. Platnost poboček</h4>
+                    <div id="rule-branch-wrapper" class="relative">
+                        <div class="relative flex items-center bg-white border border-gray-300 rounded-lg px-3 py-2 focus-within:border-brand-500 transition-all shadow-sm cursor-pointer hover:border-gray-400" onclick="toggleRuleBranchDropdown()">
+                            <i class="fa-solid fa-store text-gray-400 mr-2.5"></i>
+                            <input type="text" id="rule-branch-input" class="text-sm font-bold text-gray-900 bg-transparent border-none focus:outline-none w-full pointer-events-none" value="Všechny pobočky (3)" readonly>
+                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs absolute right-3"></i>
+                        </div>
+                        <div id="rule-branch-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden flex-col overflow-hidden">
+                            <div class="p-2 border-b border-gray-100 bg-gray-50 shrink-0">
+                                <input type="text" id="rule-search" onkeyup="filterRuleBranches()" onclick="event.stopPropagation();" class="w-full bg-white border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-brand-500 mb-2" placeholder="Hledat pobočku...">
+                                <label class="flex items-center gap-2 px-2 cursor-pointer">
+                                    <input type="checkbox" id="rule-master-cb" onchange="toggleAllRuleBranches(this)" class="w-4 h-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500" checked>
+                                    <span class="text-xs font-bold text-gray-700">Vybrat všechny</span>
+                                </label>
+                            </div>
+                            <div class="p-1 max-h-48 overflow-y-auto custom-scrollbar" id="rule-branch-list">
+                                <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer transition rule-opt">
+                                    <input type="checkbox" value="Praha 13" onchange="updateRuleBranchSelection()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 rule-cb" checked>
+                                    <span class="text-sm text-gray-700">Praha 13</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer transition rule-opt">
+                                    <input type="checkbox" value="Brno" onchange="updateRuleBranchSelection()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 rule-cb" checked>
+                                    <span class="text-sm text-gray-700">Brno</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer transition rule-opt">
+                                    <input type="checkbox" value="Liberec" onchange="updateRuleBranchSelection()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 rule-cb" checked>
+                                    <span class="text-sm text-gray-700">Liberec</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Název -->
+                <div>
+                    <h4 class="font-bold text-gray-900 text-sm mb-3 border-b border-gray-100 pb-2">2. Identifikace pravidla</h4>
+                    <input type="text" id="rule-name-input" class="input-minimal" placeholder="Pojmenujte toto pravidlo (např. Děkování v Praze)...">
+                </div>
+
+                <!-- 3. Podmínka (Hvězdičky) -->
+                <div>
+                    <h4 class="font-bold text-gray-900 text-sm mb-3 border-b border-gray-100 pb-2">3. Pro jaká hodnocení pravidlo platí?</h4>
+                    <p class="text-xs text-gray-500 mb-3">Vyberte počty hvězdiček. Pokud recenze odpovídá výběru, automatizace se spustí.</p>
+                    <div class="flex gap-3">
+                        <!-- 5 Hvězd -->
+                        <label class="flex-1 cursor-pointer">
+                            <input type="checkbox" class="sr-only star-cb condition-star" value="5" checked>
+                            <div class="border border-gray-200 rounded-lg p-3 text-center transition-colors hover:border-yellow-400 text-gray-400">
+                                <span class="font-bold text-lg block mb-1">5</span>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </label>
+                        <!-- 4 Hvězdy -->
+                        <label class="flex-1 cursor-pointer">
+                            <input type="checkbox" class="sr-only star-cb condition-star" value="4" checked>
+                            <div class="border border-gray-200 rounded-lg p-3 text-center transition-colors hover:border-yellow-400 text-gray-400">
+                                <span class="font-bold text-lg block mb-1">4</span>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </label>
+                        <!-- 3 Hvězdy -->
+                        <label class="flex-1 cursor-pointer">
+                            <input type="checkbox" class="sr-only star-cb condition-star" value="3">
+                            <div class="border border-gray-200 rounded-lg p-3 text-center transition-colors hover:border-yellow-400 text-gray-400">
+                                <span class="font-bold text-lg block mb-1">3</span>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </label>
+                        <!-- 2 Hvězdy -->
+                        <label class="flex-1 cursor-pointer">
+                            <input type="checkbox" class="sr-only star-cb condition-star" value="2">
+                            <div class="border border-gray-200 rounded-lg p-3 text-center transition-colors hover:border-yellow-400 text-gray-400">
+                                <span class="font-bold text-lg block mb-1">2</span>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </label>
+                        <!-- 1 Hvězda -->
+                        <label class="flex-1 cursor-pointer">
+                            <input type="checkbox" class="sr-only star-cb condition-star" value="1">
+                            <div class="border border-gray-200 rounded-lg p-3 text-center transition-colors hover:border-yellow-400 text-gray-400">
+                                <span class="font-bold text-lg block mb-1">1</span>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 4. Akce -->
+                <div>
+                    <h4 class="font-bold text-gray-900 text-sm mb-3 border-b border-gray-100 pb-2">4. Jak se má odpovídat?</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="relative cursor-pointer group">
+                            <input type="radio" name="auto_type" value="reply" class="peer sr-only role-radio" checked onchange="toggleAutoForm()">
+                            <div class="border border-gray-200 rounded-xl p-4 flex gap-3 transition-colors hover:border-gray-300 peer-checked:border-brand-500 peer-checked:bg-green-50">
+                                <i class="fa-regular fa-copy text-gray-400 text-xl mt-1 transition-colors"></i>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900">Použít Šablony</p>
+                                    <p class="text-[10px] text-gray-500 mt-1 leading-relaxed">Systém bude náhodně střídat globální šablony odpovídající počtu hvězd.</p>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer group">
+                            <input type="radio" name="auto_type" value="ai" class="peer sr-only role-radio" onchange="toggleAutoForm()">
+                            <div class="border border-gray-200 rounded-xl p-4 flex gap-3 transition-colors hover:border-gray-300 peer-checked:border-brand-500 peer-checked:bg-green-50">
+                                <i class="fa-solid fa-wand-magic-sparkles text-gray-400 text-xl mt-1 transition-colors"></i>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900">AI Asistent</p>
+                                    <p class="text-[10px] text-gray-500 mt-1 leading-relaxed">Umělá inteligence zanalyzuje text a vygeneruje unikátní odpověď.</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 5. Dynamické nastavení -->
+                <div id="form-auto-reply" class="block bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-circle-info text-brand-500"></i>
+                        <p class="text-sm text-gray-800 font-medium">Bude použito automatické rotování textů.</p>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Šablony si můžete spravovat v záložce "Šablony odpovědí". Pokud klient napíše k hodnocení text, systém šablonu nepoužije, abyste mohli reagovat individuálně.</p>
+                </div>
+
+                <div id="form-ai-ast" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label-minimal">Tón komunikace AI</label>
+                            <div class="relative">
+                                <select id="ai-tone-select" class="input-minimal appearance-none pr-8 bg-white">
+                                    <option value="profesional">Vysoce profesionální (Vykání)</option>
+                                    <option value="friendly" selected>Přátelský a moderní (Vykání)</option>
+                                    <option value="casual">Kamaradský (Tykání)</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="label-minimal">Podpis AI (Volitelné)</label>
+                            <input type="text" id="ai-signature-input" class="input-minimal bg-white" value="Tým Business Power">
+                        </div>
+                    </div>
+                    <div class="pt-2 border-t border-gray-200">
+                        <label class="flex items-start gap-3 cursor-pointer group">
+                            <div class="relative flex items-center justify-center mt-0.5">
+                                <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors" checked>
+                                <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-900">Automaticky odeslat odpověď AI</p>
+                                <p class="text-xs text-gray-500 mt-1">Pokud vypnuto, AI pouze připraví návrh do Inboxu a bude čekat na Vaše ruční schválení (odeslání).</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3 shrink-0">
+                <button onclick="closeAutomationModal()" class="px-5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition shadow-sm">Zrušit</button>
+                <button onclick="submitAutomationRule()" class="px-5 py-2 rounded-lg text-sm font-bold text-white bg-brand-500 hover:bg-brand-600 transition shadow-sm">Vytvořit a zapnout pravidlo</button>
             </div>
         </div>
     </div>
@@ -683,7 +869,7 @@
     </div>
 
     <script>
-        // Logika menu
+        // === ZÁKLADNÍ UI (Menu, Toasty) ===
         function toggleMenu(menuId) {
             const submenu = document.getElementById(menuId);
             if(submenu) {
@@ -691,7 +877,6 @@
                 submenu.classList.toggle('max-h-40'); submenu.classList.toggle('opacity-100'); submenu.classList.toggle('py-1');
             }
         }
-
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
@@ -704,28 +889,9 @@
                 setTimeout(() => overlay.classList.add('hidden'), 300);
             }
         }
-
-        // TABS přepínání
-        function switchTab(tabId) {
-            const tabs = ['tab-inbox', 'tab-ai', 'tab-alerts'];
-            tabs.forEach(t => {
-                document.getElementById(t).classList.add('hidden');
-                document.getElementById(t).classList.remove('block');
-                document.getElementById('btn-' + t).className = 'whitespace-nowrap py-3 px-5 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
-            });
-            document.getElementById(tabId).classList.remove('hidden');
-            document.getElementById(tabId).classList.add('block');
-            document.getElementById('btn-' + tabId).className = 'whitespace-nowrap py-3 px-5 border-b-2 font-bold text-sm transition-colors border-brand-500 text-brand-600';
-            
-            const mainContainer = document.querySelector('main');
-            if (mainContainer) mainContainer.scrollTop = 0;
-        }
-
-        // TOAST
         let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast');
-            if(!toast) return;
             document.getElementById('toast-message').innerText = message;
             toast.classList.remove('opacity-0', 'translate-y-4');
             toast.classList.add('opacity-100', 'translate-y-0');
@@ -736,79 +902,302 @@
             }, 3000);
         }
 
-        // Tlačítko odpovědět u recenze (rozbalí textarea)
-        function toggleReplyBox(boxId) {
-            const box = document.getElementById(boxId);
-            if(box.classList.contains('hidden')) {
-                box.classList.remove('hidden');
-                box.querySelector('textarea').focus();
-            } else {
-                box.classList.add('hidden');
-            }
+        // === PŘEPÍNÁNÍ ZÁLOŽEK ===
+        function switchTab(tabId) {
+            ['tab-inbox', 'tab-sablony', 'tab-ai', 'tab-upozorneni'].forEach(t => {
+                document.getElementById(t).classList.add('hidden');
+                document.getElementById(t).classList.remove('block');
+                document.getElementById('btn-' + t).className = 'whitespace-nowrap pb-3 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 flex items-center gap-2';
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+            document.getElementById('btn-' + tabId).className = 'whitespace-nowrap pb-3 border-b-2 font-bold text-sm transition-colors border-brand-500 text-brand-600 flex items-center gap-2';
         }
 
-        function submitReply(boxId) {
-            showToast('Odpověď byla úspěšně odeslána na Google!');
-            document.getElementById(boxId).classList.add('hidden');
-        }
-
-        // MOCKUP AI GENERACE ODPOVĚDI
-        function generateAiReply(textareaId, sentiment = 'positive') {
-            const textarea = document.getElementById(textareaId);
-            const loadingOverlay = document.getElementById(textareaId.replace('reply-text-', 'ai-loading-'));
+        // === INBOX: FILTROVÁNÍ ===
+        let currentStatusFilter = 'all';
+        function filterStatus(status, btnElement) {
+            currentStatusFilter = status;
+            document.querySelectorAll('.inbox-status-btn').forEach(btn => {
+                btn.className = 'inbox-status-btn px-4 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 rounded transition whitespace-nowrap';
+            });
+            btnElement.className = 'inbox-status-btn px-4 py-1.5 text-sm font-bold bg-white text-gray-900 rounded shadow-sm transition whitespace-nowrap';
             
-            // Vyprázdnit a ukázat načítání
-            textarea.value = "";
-            loadingOverlay.classList.remove('hidden');
-            loadingOverlay.classList.add('flex');
+            document.querySelectorAll('.review-item').forEach(review => {
+                const statusMatch = currentStatusFilter === 'all' || review.dataset.status === currentStatusFilter;
+                review.style.display = statusMatch ? '' : 'none';
+            });
+        }
 
-            // Simulace API callu (1.5 sekundy)
-            setTimeout(() => {
-                loadingOverlay.classList.remove('flex');
-                loadingOverlay.classList.add('hidden');
-                
-                let generatedText = "";
-                if(sentiment === 'positive') {
-                    generatedText = "Dobrý den, Petře, \n\nvelice Vám děkujeme za úžasné hodnocení a milá slova. Těší nás, že Vám náš přístup a nastavení PPC kampaní pomohlo. Budeme se těšit na další úspěšnou spolupráci!\n\nS pozdravem,\nTým Business Power";
-                } else {
-                    generatedText = "Dobrý den, Martine, \n\nvelice se omlouváme za tuto nepříjemnou zkušenost a Vaše zbytečné čekání na pobočce. Toto chování u nás rozhodně není standardem. Došlo k internímu selhání komunikace v diáři makléře.\n\nProsím, kontaktujte nás přímo na info@businesspower.cz, rádi bychom Vám jako omluvu nabídli náhradní termín a konzultaci zdarma.\n\nS úctou k Vašemu času,\nVedení Business Power";
+        // Zavírání našeptávačů při kliknutí mimo
+        document.addEventListener('click', function(event) {
+            const inboxWrapper = document.getElementById('inbox-branch-wrapper');
+            const inboxDrop = document.getElementById('inbox-branch-dropdown');
+            if (inboxWrapper && inboxDrop && !inboxWrapper.contains(event.target)) inboxDrop.classList.add('hidden');
+
+            const ruleWrap = document.getElementById('rule-branch-wrapper');
+            const ruleDrop = document.getElementById('rule-branch-dropdown');
+            if (ruleWrap && ruleDrop && !ruleWrap.contains(event.target)) ruleDrop.classList.add('hidden');
+        });
+
+        function toggleInboxBranchDropdown() {
+            document.getElementById('inbox-branch-dropdown').classList.toggle('hidden');
+            document.getElementById('inbox-branch-input').focus();
+        }
+
+        function filterInboxBranches() {
+            const val = document.getElementById('inbox-branch-input').value.toLowerCase();
+            document.querySelectorAll('.inbox-opt').forEach(opt => {
+                opt.style.display = opt.innerText.toLowerCase().includes(val) ? "flex" : "none";
+            });
+        }
+
+        function toggleAllInboxBranches(masterCb) {
+            document.querySelectorAll('.inbox-branch-cb').forEach(cb => {
+                if (cb.closest('.inbox-opt').style.display !== 'none') {
+                    cb.checked = masterCb.checked;
                 }
+            });
+            updateInboxBranchSelection();
+        }
 
-                // Efekt plynulého psaní
-                let i = 0;
-                textarea.value = "";
-                const typeWriter = setInterval(() => {
-                    textarea.value += generatedText.charAt(i);
-                    i++;
-                    if (i > generatedText.length - 1) {
-                        clearInterval(typeWriter);
-                        showToast('AI návrh byl úspěšně vygenerován.');
-                    }
-                }, 10); // Rychlost psaní
-                
+        function updateInboxBranchSelection() {
+            // Simulace filtru v UI (neprovádí reálný filtr prvků pro jednoduchost demíčka, pouze aktualizuje Label)
+            const input = document.getElementById('inbox-branch-input');
+            const checkedCb = document.querySelectorAll('.inbox-branch-cb:checked');
+            
+            if (checkedCb.length === 0) input.value = "Nevybrána žádná pobočka";
+            else if (checkedCb.length === 3) input.value = "Všechny pobočky (3)";
+            else input.value = `Vybrány ${checkedCb.length} pobočky`;
+        }
+
+        // === INBOX: AKCE S RECENZEMI ===
+        function openReply(id) {
+            const box = document.getElementById(id);
+            box.classList.remove('hidden');
+        }
+        function closeReply(id) {
+            const box = document.getElementById(id);
+            box.classList.add('hidden');
+        }
+
+        function submitReply(id) {
+            const box = document.getElementById(id);
+            box.innerHTML = `
+                <div class="bg-green-50/50 border-l-2 border-brand-500 p-4 rounded-r-lg mt-2">
+                    <div class="flex justify-between items-center mb-1">
+                        <p class="text-xs font-bold text-brand-700">Vaše odpověď byla odeslána</p>
+                    </div>
+                </div>
+            `;
+            box.closest('.review-item').dataset.status = 'answered';
+            showToast('Odpověď byla úspěšně odeslána na Google');
+        }
+
+        function generateAI(textareaId, loaderId) {
+            const textarea = document.getElementById(textareaId);
+            const loader = document.getElementById(loaderId);
+            
+            textarea.disabled = true;
+            loader.classList.remove('hidden');
+            setTimeout(() => loader.classList.remove('opacity-0'), 10);
+            
+            setTimeout(() => {
+                textarea.value = "Dobrý den, děkujeme za vaše hodnocení! Vážíme si vaší zpětné vazby a doufáme, že se brzy znovu uvidíme. Tým Business Power.";
+                loader.classList.add('opacity-0');
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    textarea.disabled = false;
+                }, 300);
             }, 1500);
         }
 
-        // Nahlášení recenze
-        function reportReviewModal() {
+        // === ŠABLONY V INBOXU ===
+        let activeTextareaId = null;
+        function openTemplateModal(textareaId) {
+            activeTextareaId = textareaId;
+            const modal = document.getElementById('template-modal');
+            const modalContent = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => modalContent.classList.remove('scale-95'), 10);
+        }
+        function closeTemplateModal() {
+            const modal = document.getElementById('template-modal');
+            const modalContent = modal.querySelector('div');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 300);
+        }
+        function applyTemplate(text) {
+            if (activeTextareaId) {
+                const textarea = document.getElementById(activeTextareaId);
+                textarea.value = text;
+                showToast('Šablona byla vložena.');
+                textarea.focus();
+            }
+            closeTemplateModal();
+        }
+
+        // === NAHLÁŠENÍ ===
+        function openReportModal() {
             const modal = document.getElementById('report-modal');
             const modalContent = modal.querySelector('div');
             modal.classList.remove('opacity-0', 'pointer-events-none');
             setTimeout(() => modalContent.classList.remove('scale-95'), 10);
         }
-
         function closeReportModal() {
             const modal = document.getElementById('report-modal');
             const modalContent = modal.querySelector('div');
             modalContent.classList.add('scale-95');
             setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 300);
         }
-
         function submitReport() {
-            showToast('Požadavek na odstranění byl odeslán do Google centrály.');
+            showToast('Recenze byla nahlášena podpoře Google.');
             closeReportModal();
         }
 
+        // === NOVÝ MODÁL AUTOMATIZACE (Pravidla) ===
+        function openAutomationModal() {
+            // Reset formuláře
+            document.getElementById('rule-name-input').value = '';
+            document.querySelectorAll('.condition-star').forEach(cb => cb.checked = ['4','5'].includes(cb.value));
+            document.querySelector('input[name="auto_type"][value="reply"]').checked = true;
+            toggleAutoForm();
+            
+            const modal = document.getElementById('automation-modal');
+            const modalContent = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => modalContent.classList.remove('scale-95'), 10);
+        }
+
+        function closeAutomationModal() {
+            const modal = document.getElementById('automation-modal');
+            const modalContent = modal.querySelector('div');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 300);
+        }
+
+        function toggleAutoForm() {
+            const val = document.querySelector('input[name="auto_type"]:checked').value;
+            const formAuto = document.getElementById('form-auto-reply');
+            const formAi = document.getElementById('form-ai-ast');
+
+            if(val === 'reply') {
+                formAuto.classList.remove('hidden'); formAuto.classList.add('block');
+                formAi.classList.add('hidden'); formAi.classList.remove('block');
+            } else {
+                formAi.classList.remove('hidden'); formAi.classList.add('block');
+                formAuto.classList.add('hidden'); formAuto.classList.remove('block');
+            }
+        }
+
+        function toggleRuleBranchDropdown() {
+            const dropdown = document.getElementById('rule-branch-dropdown');
+            dropdown.classList.toggle('hidden');
+            if(!dropdown.classList.contains('hidden')) document.getElementById('rule-search').focus();
+        }
+
+        function filterRuleBranches() {
+            const val = document.getElementById('rule-search').value.toLowerCase();
+            document.querySelectorAll('.rule-opt').forEach(opt => {
+                opt.style.display = opt.innerText.toLowerCase().includes(val) ? "flex" : "none";
+            });
+        }
+
+        function toggleAllRuleBranches(masterCb) {
+            document.querySelectorAll('.rule-cb').forEach(cb => {
+                if (cb.closest('.rule-opt').style.display !== 'none') cb.checked = masterCb.checked;
+            });
+            updateRuleBranchSelection();
+        }
+
+        function updateRuleBranchSelection() {
+            const input = document.getElementById('rule-branch-input');
+            const allCb = document.querySelectorAll('.rule-cb');
+            const checkedCb = document.querySelectorAll('.rule-cb:checked');
+            const masterCb = document.getElementById('rule-master-cb');
+            
+            if (checkedCb.length === 0) {
+                input.value = "Nejsou vybrány pobočky";
+                if(masterCb) masterCb.checked = false;
+            } else if (checkedCb.length === allCb.length) {
+                input.value = "Všechny pobočky (" + allCb.length + ")";
+                if(masterCb) masterCb.checked = true;
+            } else if (checkedCb.length === 1) {
+                input.value = checkedCb[0].value;
+                if(masterCb) masterCb.checked = false;
+            } else {
+                input.value = "Vybráno " + checkedCb.length + " poboček";
+                if(masterCb) masterCb.checked = false;
+            }
+        }
+
+        function submitAutomationRule() {
+            const nameInput = document.getElementById('rule-name-input').value.trim() || 'Nové pravidlo';
+            const type = document.querySelector('input[name="auto_type"]:checked').value;
+            const branches = document.getElementById('rule-branch-input').value;
+            
+            // Posbírání zaškrtnutých hvězdiček
+            let stars = [];
+            document.querySelectorAll('.condition-star:checked').forEach(cb => stars.push(cb.value));
+            let starsText = stars.length > 0 ? stars.sort().join(', ') + ' hvězdiček' : 'Všechna hodnocení';
+
+            let icon, circleClass, textClass, subtitle, settingsText;
+
+            if (type === 'reply') {
+                icon = '<i class="fa-regular fa-copy"></i>';
+                circleClass = 'bg-brand-50 text-brand-600';
+                textClass = 'text-brand-600';
+                subtitle = 'Rotace šablon';
+                settingsText = `<p class="text-sm text-gray-600"><strong class="text-gray-900">Kdy odeslat:</strong> Hodnocení ${starsText} (bez textu).</p>`;
+            } else {
+                icon = '<i class="fa-solid fa-wand-magic-sparkles"></i>';
+                circleClass = 'bg-purple-50 text-purple-600';
+                textClass = 'text-purple-600';
+                subtitle = 'AI Asistent';
+                const toneSelect = document.getElementById('ai-tone-select');
+                const tone = toneSelect.options[toneSelect.selectedIndex].text;
+                settingsText = `
+                    <p class="text-sm text-gray-600 mb-1"><strong class="text-gray-900">Kdy odeslat:</strong> Hodnocení ${starsText}.</p>
+                    <p class="text-sm text-gray-600"><strong class="text-gray-900">Tón AI:</strong> ${tone}</p>
+                `;
+            }
+
+            const newCardHTML = `
+                <div class="card-minimal p-6 flex flex-col h-full relative group bg-white hover:border-brand-300 transition-all duration-300">
+                    <div class="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="openAutomationModal()" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition" title="Upravit"><i class="fa-solid fa-pen text-xs"></i></button>
+                        <button onclick="this.closest('.card-minimal').remove(); showToast('Pravidlo bylo smazáno');" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition" title="Smazat"><i class="fa-solid fa-trash text-xs"></i></button>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full ${circleClass} flex items-center justify-center shrink-0">
+                            ${icon}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-base leading-tight">${nameInput}</h4>
+                            <p class="text-[10px] ${textClass} font-bold uppercase tracking-wider mt-0.5">${subtitle}</p>
+                        </div>
+                    </div>
+                    <div class="mb-4 flex-1">
+                        <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Pro pobočky:</strong> ${branches}</p>
+                        ${settingsText}
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <label class="flex items-center cursor-pointer">
+                            <div class="relative">
+                                <input type="checkbox" class="sr-only" checked>
+                                <div class="block bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
+                                <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                            </div>
+                            <span class="ml-2 text-xs font-bold text-gray-700">Aktivní</span>
+                        </label>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('automation-rules-container').insertAdjacentHTML('beforeend', newCardHTML);
+            showToast('Pravidlo bylo úspěšně vytvořeno.');
+            closeAutomationModal();
+        }
     </script>
 </body>
 </html>
