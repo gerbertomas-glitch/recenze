@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Správa recenzí | View</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome pro ikony -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 500: '#16a34a', 600: '#15803d' },
+                        surface: '#fcfcfc',
+                        border: '#e5e7eb'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f3f4f6; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        
+        .card-minimal {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-minimal {
+            width: 100%;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.875rem;
+            color: #111827;
+            transition: all 0.2s;
+        }
+        .input-minimal:focus { outline: none; border-color: #16a34a; box-shadow: 0 0 0 1px #16a34a; }
+        
+        .label-minimal {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* AI Typing animation */
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out;
+            fill: #16a34a;
+        }
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-900 h-screen flex overflow-hidden antialiased">
+
+    <!-- Mobilní overlay -->
+    <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-30 hidden md:hidden transition-opacity opacity-0 duration-300"></div>
+
+    <!-- LEVÉ MENU -->
+    <aside id="sidebar" class="w-64 bg-surface border-r border-border flex flex-col flex-shrink-0 z-40 fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300">
+        <!-- Logo -->
+        <div class="h-16 flex items-center justify-between px-6 border-b border-border shrink-0">
+            <img src="https://viewcz.com/images/svg/head-logo.svg" alt="View Logo" class="h-8 object-contain">
+            <button onclick="toggleMobileMenu()" class="md:hidden text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Navigace -->
+        <nav class="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-1 custom-scrollbar">
+            <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Menu</p>
+            
+            <a href="dashboard.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition">
+                <i class="fa-solid fa-layer-group w-5 text-center"></i> Přehled
+            </a>
+            
+            <!-- AKTIVNÍ SEKCE: FIREMNÍ GOOGLE PROFIL -->
+            <div>
+                <button onclick="toggleMenu('gmb-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-google w-5 text-center text-brand-600"></i> <span class="font-bold text-gray-900">Firemní Google profil</span>
+                    </div>
+                </button>
+                <div id="gmb-submenu" class="flex flex-col gap-1 pl-11 pr-3 max-h-40 opacity-100 py-1 transition-all duration-300 overflow-hidden">
+                    <a href="seznam-profilu.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Seznam profilů</a>
+                    <a href="gmb-prispevky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Google Novinky</a>
+                    <a href="gmb-recenze.html" class="block py-1.5 text-sm text-brand-600 font-bold transition">Správa recenzí</a>
+                    <a href="gmb-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistiky</a>
+                </div>
+            </div>
+
+            <div>
+                <button onclick="toggleMenu('sv-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-street-view w-5 text-center"></i> Google Street View
+                    </div>
+                </button>
+                <div id="sv-submenu" class="flex flex-col gap-1 pl-11 pr-3 max-h-0 overflow-hidden opacity-0 transition-all duration-300">
+                    <a href="sv-prohlidka.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Moje virtuální prohlídka</a>
+                    <a href="sv-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistika</a>
+                </div>
+            </div>
+            
+            <div>
+                <button onclick="toggleMenu('nfc-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-wifi w-5 text-center"></i> NFC Produkty
+                    </div>
+                </button>
+                <div id="nfc-submenu" class="flex flex-col gap-1 pl-11 pr-3 max-h-0 overflow-hidden opacity-0 transition-all duration-300">
+                    <a href="nfc-seznam.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Seznam produktů</a>
+                    <a href="nfc-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistika</a>
+                </div>
+            </div>
+
+            <div>
+                <button onclick="toggleMenu('ads-submenu')" class="w-full flex items-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition group">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bullhorn w-5 text-center"></i> Google Ads
+                    </div>
+                </button>
+                <div id="ads-submenu" class="flex flex-col gap-1 pl-11 pr-3 max-h-0 overflow-hidden opacity-0 transition-all duration-300">
+                    <a href="ads-kampane.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Moje kampaně</a>
+                    <a href="ads-statistiky.html" class="block py-1.5 text-sm text-gray-500 hover:text-gray-900 transition font-medium">Statistika</a>
+                </div>
+            </div>
+
+            <div class="h-px bg-border my-4 mx-3"></div>
+            <a href="nastaveni.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 px-3 py-2.5 rounded-lg font-medium transition">
+                <i class="fa-solid fa-gear w-5 text-center"></i> Nastavení
+            </a>
+        </nav>
+
+        <!-- Kontakt na obchodníka -->
+        <div class="p-4 border-t border-border bg-gray-50">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">Váš obchodník</p>
+            <div class="flex items-center gap-3 mb-3">
+                <img src="https://iili.io/2iP8d1p.png" alt="Tomáš Gerber" class="w-10 h-10 rounded-full object-cover border border-gray-300 shrink-0">
+                <div class="overflow-hidden">
+                    <p class="font-medium text-sm text-gray-900 truncate">Tomáš Gerber</p>
+                    <p class="text-xs text-gray-500 mt-0.5">+420 728 414 452</p>
+                    <p class="text-xs text-gray-500 truncate hover:text-brand-600 transition">gerber@viewcz.com</p>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="w-full bg-white border border-gray-300 text-gray-700 py-1.5 rounded text-xs font-semibold hover:bg-gray-50 transition shadow-sm mt-1">
+                Napsat zprávu
+            </button>
+        </div>
+    </aside>
+
+    <!-- HLAVNÍ OBSAH -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden min-w-0">
+        
+        <!-- HORNÍ LIŠTA -->
+        <header class="h-16 bg-surface border-b border-border flex items-center justify-between px-4 sm:px-8 z-20 shrink-0">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-500 hover:text-gray-700 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-lg sm:text-xl font-semibold text-gray-900 tracking-tight truncate">Správa recenzí</h1>
+            </div>
+            
+            <div class="flex items-center gap-4 sm:gap-6">
+                <button class="relative text-gray-400 hover:text-gray-600 transition">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-surface"></span>
+                </button>
+                <div class="flex items-center gap-3 hover:opacity-80 transition cursor-pointer">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-semibold text-gray-900 leading-none">Business Power s.r.o.</p>
+                        <p class="text-[11px] text-gray-500 mt-1">IČO: 27177572</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold shadow-sm">BP</div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto relative bg-gray-100 custom-scrollbar flex flex-col">
+            
+            <!-- TOP FIXNÍ LIŠTA (Taby) -->
+            <div class="bg-white border-b border-gray-200 shrink-0 z-10 sticky top-0 shadow-sm pt-4">
+                <div class="max-w-7xl mx-auto px-4 sm:px-8 flex justify-between items-end">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Recenze z Google profilů</h2>
+                        <p class="text-sm text-gray-500 mt-1 mb-4">Odpovídejte klientům, nahlašujte spam a nastavte si automatizaci pomocí AI.</p>
+                    </div>
+                    <div class="hidden md:flex gap-3 mb-4">
+                        <button onclick="showToast('Aktualizuji data z Google API...')" class="bg-white border border-gray-300 text-gray-700 h-[38px] px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm flex items-center gap-2 shrink-0">
+                            <i class="fa-solid fa-rotate-right"></i> Synchronizovat
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="max-w-7xl mx-auto flex overflow-x-auto hide-scrollbar px-4 sm:px-8">
+                    <button onclick="switchTab('tab-inbox')" id="btn-tab-inbox" class="whitespace-nowrap py-3 px-5 border-b-2 font-bold text-sm transition-colors border-brand-500 text-brand-600">
+                        <i class="fa-solid fa-inbox mr-2"></i> Přijaté recenze
+                    </button>
+                    <button onclick="switchTab('tab-ai')" id="btn-tab-ai" class="whitespace-nowrap py-3 px-5 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        <i class="fa-solid fa-robot mr-2"></i> Automatizace & AI
+                    </button>
+                    <button onclick="switchTab('tab-alerts')" id="btn-tab-alerts" class="whitespace-nowrap py-3 px-5 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        <i class="fa-regular fa-bell mr-2"></i> Upozornění
+                    </button>
+                </div>
+            </div>
+
+            <!-- OBSAH TABŮ -->
+            <div class="p-4 sm:p-8 max-w-7xl mx-auto w-full">
+                
+                <!-- TAB 1: INBOX (PŘIJATÉ RECENZE) -->
+                <div id="tab-inbox" class="space-y-6 block">
+                    
+                    <!-- KPI Karty -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col justify-between">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Průměrné hodnocení</p>
+                            <div class="flex items-center gap-2">
+                                <p class="text-3xl font-bold text-gray-900">4.8</p>
+                                <i class="fa-solid fa-star text-yellow-400 text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col justify-between">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Všech recenzí</p>
+                            <p class="text-3xl font-bold text-gray-900">1,245</p>
+                        </div>
+                        <div class="bg-white border border-blue-200 bg-blue-50/50 rounded-xl p-4 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute left-0 top-0 w-1 h-full bg-blue-500"></div>
+                            <p class="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-2">Čeká na odpověď</p>
+                            <p class="text-3xl font-bold text-gray-900">12</p>
+                        </div>
+                        <div class="bg-white border border-orange-200 bg-orange-50/50 rounded-xl p-4 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute left-0 top-0 w-1 h-full bg-orange-500"></div>
+                            <p class="text-[10px] font-bold text-orange-600 uppercase tracking-wider mb-2">Nahlášeno Googlu</p>
+                            <p class="text-3xl font-bold text-gray-900">3</p>
+                        </div>
+                    </div>
+
+                    <!-- Filtry Inboxu -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
+                            <button class="px-4 py-1.5 bg-gray-100 text-gray-900 text-sm font-bold rounded-lg border border-gray-200 shrink-0 transition">Všechny</button>
+                            <button class="px-4 py-1.5 bg-white text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-lg border border-transparent hover:border-gray-200 shrink-0 transition">Neodpovězené</button>
+                            <button class="px-4 py-1.5 bg-white text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-lg border border-transparent hover:border-gray-200 shrink-0 transition">Odpovězené</button>
+                        </div>
+                        <div class="flex items-center gap-3 w-full md:w-auto">
+                            <div class="relative w-full md:w-48">
+                                <select class="input-minimal py-2 text-sm appearance-none pr-8">
+                                    <option value="all">Všechna hodnocení</option>
+                                    <option value="5">5 hvězdiček</option>
+                                    <option value="4">4 hvězdičky</option>
+                                    <option value="3">3 hvězdičky</option>
+                                    <option value="2">2 hvězdičky</option>
+                                    <option value="1">1 hvězdička</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
+                            </div>
+                            <div class="relative w-full md:w-64">
+                                <select class="input-minimal py-2 text-sm appearance-none pr-8">
+                                    <option value="all">Všechny pobočky (10)</option>
+                                    <option value="Praha">Praha 13</option>
+                                    <option value="Brno">Brno</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        
+                        <!-- RECENZE 1: Neodpovězená s textem (Ukázka AI) -->
+                        <div class="card-minimal overflow-hidden">
+                            <div class="p-5 sm:p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg shrink-0">PK</div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 text-base">Petr Novák</h4>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <div class="flex text-yellow-400 text-xs">
+                                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                                </div>
+                                                <span class="text-xs text-gray-500">• před 2 dny</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:block">Neodpovězeno</span>
+                                </div>
+                                <p class="text-gray-800 text-sm leading-relaxed mb-4">Skvělý přístup a rychlé jednání. Pobočka v Praze mi velmi pomohla s nastavením PPC kampaní. Určitě doporučuji všem, co hledají profesionály.</p>
+                                
+                                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100">
+                                    <p class="text-xs text-gray-500 font-medium"><i class="fa-solid fa-location-dot mr-1"></i> Business Power s.r.o. - Praha 13</p>
+                                    <div class="flex gap-2 w-full sm:w-auto">
+                                        <button onclick="toggleReplyBox('reply-box-1')" class="flex-1 sm:flex-none bg-brand-50 text-brand-600 px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-brand-100 transition border border-brand-200">
+                                            <i class="fa-solid fa-reply mr-1"></i> Odpovědět
+                                        </button>
+                                        <button onclick="reportReviewModal()" class="px-3 py-1.5 bg-white border border-gray-200 text-gray-500 rounded-lg text-sm hover:bg-gray-50 hover:text-red-500 transition" title="Nahlásit recenzi Googlu">
+                                            <i class="fa-solid fa-flag"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Skrytý box pro odpověď -->
+                            <div id="reply-box-1" class="hidden bg-gray-50 border-t border-gray-200 p-5 sm:p-6">
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="label-minimal !mb-0">Vaše odpověď (veřejná)</label>
+                                    <button onclick="generateAiReply('reply-text-1')" class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-200 hover:bg-brand-100 transition flex items-center gap-1.5">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Doporučení AI
+                                    </button>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="reply-text-1" class="input-minimal w-full min-h-[100px] text-sm leading-relaxed resize-y" placeholder="Napište odpověď zákazníkovi..."></textarea>
+                                    <!-- Animace načítání AI -->
+                                    <div id="ai-loading-1" class="absolute inset-0 bg-white/80 backdrop-blur-sm hidden items-center justify-center rounded-lg border border-transparent">
+                                        <div class="flex items-center gap-2 text-brand-600 font-bold text-sm">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <circle class="typing-dot" cx="4" cy="12" r="3"/>
+                                                <circle class="typing-dot" cx="12" cy="12" r="3"/>
+                                                <circle class="typing-dot" cx="20" cy="12" r="3"/>
+                                            </svg>
+                                            Generuji odpověď...
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-3">
+                                    <button class="text-xs text-gray-500 hover:text-gray-700 font-medium transition"><i class="fa-regular fa-folder-open mr-1"></i> Použít šablonu</button>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleReplyBox('reply-box-1')" class="px-4 py-1.5 text-sm text-gray-600 font-medium hover:bg-gray-200 rounded transition">Zrušit</button>
+                                        <button onclick="submitReply('reply-box-1')" class="px-5 py-1.5 bg-brand-500 text-white text-sm font-bold rounded shadow-sm hover:bg-brand-600 transition">Odeslat</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RECENZE 2: Špatná recenze -->
+                        <div class="card-minimal overflow-hidden">
+                            <div class="p-5 sm:p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex gap-4">
+                                        <img src="https://placehold.co/100x100/e2e8f0/64748b?text=MJ" class="w-12 h-12 rounded-full object-cover shrink-0">
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 text-base">Martin Jílek</h4>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <div class="flex text-yellow-400 text-xs">
+                                                    <i class="fa-solid fa-star"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i><i class="fa-regular fa-star text-gray-300"></i>
+                                                </div>
+                                                <span class="text-xs text-gray-500">• před týdnem</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:block">Neodpovězeno</span>
+                                </div>
+                                <p class="text-gray-800 text-sm leading-relaxed mb-4">Byl jsem domluvený na schůzku v Brně na 10:00. Dorazil jsem včas, ale nikdo tam nebyl. Čekal jsem 20 minut a pak jsem to vzdal. Velmi neprofesionální.</p>
+                                
+                                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100">
+                                    <p class="text-xs text-gray-500 font-medium"><i class="fa-solid fa-location-dot mr-1"></i> Business Power s.r.o. - Brno</p>
+                                    <div class="flex gap-2 w-full sm:w-auto">
+                                        <button onclick="toggleReplyBox('reply-box-2')" class="flex-1 sm:flex-none bg-brand-50 text-brand-600 px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-brand-100 transition border border-brand-200">
+                                            <i class="fa-solid fa-reply mr-1"></i> Odpovědět
+                                        </button>
+                                        <button onclick="reportReviewModal()" class="px-3 py-1.5 bg-white border border-gray-200 text-gray-500 rounded-lg text-sm hover:bg-gray-50 hover:text-red-500 transition" title="Nahlásit recenzi Googlu">
+                                            <i class="fa-solid fa-flag"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Skrytý box pro odpověď 2 -->
+                            <div id="reply-box-2" class="hidden bg-gray-50 border-t border-gray-200 p-5 sm:p-6">
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="label-minimal !mb-0">Vaše odpověď (veřejná)</label>
+                                    <button onclick="generateAiReply('reply-text-2', 'negative')" class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-200 hover:bg-brand-100 transition flex items-center gap-1.5">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Doporučení AI
+                                    </button>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="reply-text-2" class="input-minimal w-full min-h-[100px] text-sm leading-relaxed resize-y" placeholder="Napište odpověď zákazníkovi..."></textarea>
+                                    <div id="ai-loading-2" class="absolute inset-0 bg-white/80 backdrop-blur-sm hidden items-center justify-center rounded-lg border border-transparent">
+                                        <div class="flex items-center gap-2 text-brand-600 font-bold text-sm">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <circle class="typing-dot" cx="4" cy="12" r="3"/>
+                                                <circle class="typing-dot" cx="12" cy="12" r="3"/>
+                                                <circle class="typing-dot" cx="20" cy="12" r="3"/>
+                                            </svg>
+                                            Generuji omluvu...
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-3">
+                                    <button class="text-xs text-gray-500 hover:text-gray-700 font-medium transition"><i class="fa-regular fa-folder-open mr-1"></i> Použít šablonu</button>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleReplyBox('reply-box-2')" class="px-4 py-1.5 text-sm text-gray-600 font-medium hover:bg-gray-200 rounded transition">Zrušit</button>
+                                        <button onclick="submitReply('reply-box-2')" class="px-5 py-1.5 bg-brand-500 text-white text-sm font-bold rounded shadow-sm hover:bg-brand-600 transition">Odeslat</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RECENZE 3: Odpovězená (Pouze hodnocení) -->
+                        <div class="card-minimal overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
+                            <div class="p-5 sm:p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-lg shrink-0">EK</div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 text-base">Eva Králová</h4>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <div class="flex text-yellow-400 text-xs">
+                                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                                </div>
+                                                <span class="text-xs text-gray-500">• před 2 týdny</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-0.5 bg-green-50 text-green-600 border border-green-100 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:block">Odpovězeno</span>
+                                </div>
+                                <p class="text-gray-500 text-sm italic mb-4">Uživatel nezanechal textové hodnocení.</p>
+                                
+                                <div class="bg-gray-50 border-l-4 border-brand-500 p-3 sm:p-4 rounded-r-lg mb-4">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <i class="fa-solid fa-reply text-brand-600 text-xs"></i>
+                                        <p class="text-xs font-bold text-gray-900">Odpověď od vlastníka <span class="font-normal text-gray-500 ml-2">(Automatická odpověď)</span></p>
+                                    </div>
+                                    <p class="text-sm text-gray-800 leading-relaxed">Dobrý den, Evo, moc děkujeme za úžasné hodnocení 5 hvězdiček! Jsme rádi, že jste byla spokojená. Budeme se těšit na další spolupráci.</p>
+                                    <div class="flex gap-3 mt-2">
+                                        <button class="text-xs text-gray-500 hover:text-brand-600 font-medium transition">Upravit</button>
+                                        <button class="text-xs text-gray-500 hover:text-red-500 font-medium transition">Smazat odpověď</button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                    <p class="text-xs text-gray-500 font-medium"><i class="fa-solid fa-location-dot mr-1"></i> Business Power s.r.o. - Liberec</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="text-center pt-4">
+                        <button class="bg-white border border-gray-300 text-gray-700 py-2 px-6 rounded-lg text-sm font-medium hover:bg-gray-50 transition shadow-sm">Načíst další recenze</button>
+                    </div>
+                </div>
+
+                <!-- TAB 2: AUTOMATIZACE & AI -->
+                <div id="tab-ai" class="hidden space-y-8">
+                    
+                    <div class="flex justify-between items-end mb-2">
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-lg">Chytrá správa recenzí</h3>
+                            <p class="text-sm text-gray-500 mt-1">Ušetřete čas a nechte systém, aby odpovídal na jednoduché recenze za vás, nebo vám připravil koncepty u těch složitějších.</p>
+                        </div>
+                    </div>
+
+                    <!-- BLOK: Auto-odpovědi na 5 hvězd bez textu -->
+                    <div class="card-minimal overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 flex justify-between items-start bg-gray-50">
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-base mb-1">Automatické odpovědi (5 hvězd bez textu)</h4>
+                                <p class="text-sm text-gray-500 max-w-2xl">Systém automaticky odpoví jménem vaší firmy na pětihvězdičkové recenze, u kterých klient nezanechal žádný text. Aby odpovědi nepůsobily jako robot, systém je náhodně střídá z vašich šablon níže.</p>
+                            </div>
+                            <label class="flex items-center cursor-pointer ml-4 mt-1">
+                                <div class="relative">
+                                    <input type="checkbox" class="sr-only" checked>
+                                    <div class="block bg-brand-500 w-12 h-7 rounded-full transition-colors"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition transform translate-x-5"></div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-end mb-4">
+                                <h5 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Aktivní šablony k rotaci</h5>
+                                <button onclick="showToast('Otevírám editor šablony...')" class="text-sm font-bold text-brand-600 hover:text-brand-700 transition"><i class="fa-solid fa-plus mr-1"></i> Přidat šablonu</button>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="border border-gray-200 rounded-lg p-4 bg-white relative group">
+                                    <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                                    </div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Šablona 1</p>
+                                    <p class="text-sm text-gray-800 leading-relaxed">Dobrý den, {jmeno_zakaznika}, moc děkujeme za skvělé hodnocení! Jsme rádi, že jste byl/a u nás spokojen/a. Budeme se těšit na další návštěvu.</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4 bg-white relative group">
+                                    <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                                    </div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Šablona 2</p>
+                                    <p class="text-sm text-gray-800 leading-relaxed">Zdravíme, {jmeno_zakaznika}. Pět hvězdiček nám udělalo obrovskou radost! Děkujeme za Vaši důvěru a přejeme hezký den. Tým Business Power.</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4 bg-white relative group">
+                                    <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                        <button class="w-7 h-7 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                                    </div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Šablona 3</p>
+                                    <p class="text-sm text-gray-800 leading-relaxed">Dobrý den, děkujeme za Vaše vynikající hodnocení. Vaše spokojenost je pro nás tou největší odměnou!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOK: AI Asistent -->
+                    <div class="card-minimal overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-base mb-1"><i class="fa-solid fa-wand-magic-sparkles text-brand-500 mr-1.5"></i> Nastavení AI Asistenta</h4>
+                                <p class="text-sm text-gray-500 max-w-2xl">Zde definujete, jak má umělá inteligence formulovat návrhy odpovědí u recenzí s textem, nebo u negativních hodnocení.</p>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="label-minimal">Tón komunikace AI</label>
+                                    <div class="relative">
+                                        <select class="input-minimal appearance-none pr-8">
+                                            <option value="profesional">Vysoce profesionální a formální (Vykání)</option>
+                                            <option value="friendly" selected>Přátelský a moderní (Vykání, uvolněný)</option>
+                                            <option value="casual">Kamaradský (Tykání)</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500 mt-1.5">Ovlivňuje výběr slov a oslovení při generování textu přes AI tlačítko u recenzí.</p>
+                                </div>
+                                <div>
+                                    <label class="label-minimal">Jméno podepisujícího (Volitelné)</label>
+                                    <input type="text" class="input-minimal" value="Tým Business Power">
+                                    <p class="text-[10px] text-gray-500 mt-1.5">Jak se má AI podepisovat na konci odpovědi.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-100">
+                                <label class="flex items-start gap-3 cursor-pointer group">
+                                    <div class="relative flex items-center justify-center mt-0.5">
+                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors">
+                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-900">Automaticky generovat a ukládat koncepty (Drafts) pro 1-4 hvězdičkové recenze</p>
+                                        <p class="text-xs text-gray-500 mt-1 max-w-2xl leading-relaxed">Pokud je zaškrtnuto, jakmile dorazí nová recenze s textem, AI si ji na pozadí přečte a rovnou do okénka připraví návrh odpovědi. Vy pak jen přijdete, zkontrolujete text a kliknete na Odeslat.</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: UPOZORNĚNÍ -->
+                <div id="tab-alerts" class="hidden space-y-6">
+                    <div class="card-minimal p-6">
+                        <h4 class="font-bold text-gray-900 text-base mb-1">Notifikace a Upozornění</h4>
+                        <p class="text-sm text-gray-500 max-w-2xl mb-6">Mějte přehled o tom, co si o vás zákazníci myslí. Nastavte si e-mailová upozornění, abyste mohli rychle reagovat na zpětnou vazbu.</p>
+                        
+                        <div class="space-y-4">
+                            
+                            <div class="p-4 border border-gray-200 rounded-lg hover:border-brand-300 transition bg-white">
+                                <label class="flex items-start gap-4 cursor-pointer">
+                                    <div class="relative flex items-center justify-center mt-1">
+                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors" checked>
+                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-bold text-gray-900">Krizové upozornění (1 až 3 hvězdičky)</p>
+                                        <p class="text-xs text-gray-500 mt-1">Okamžitě pošleme e-mail, jakmile někdo udělí průměrné nebo špatné hodnocení na jakékoliv pobočce. Rychlá reakce může zachránit vztah se zákazníkem.</p>
+                                        <div class="mt-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-envelope text-gray-400"></i>
+                                            <input type="email" class="text-sm border-b border-gray-300 focus:outline-none focus:border-brand-500 pb-1 w-64 text-gray-700 bg-transparent" value="jan.novak@businesspower.cz">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="p-4 border border-gray-200 rounded-lg hover:border-brand-300 transition bg-white">
+                                <label class="flex items-start gap-4 cursor-pointer">
+                                    <div class="relative flex items-center justify-center mt-1">
+                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors">
+                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-bold text-gray-900">Nová recenze (Jakákoliv)</p>
+                                        <p class="text-xs text-gray-500 mt-1">Dostávejte upozornění úplně na každou novou recenzi (včetně 4 a 5 hvězdiček).</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="p-4 border border-gray-200 rounded-lg hover:border-brand-300 transition bg-white">
+                                <label class="flex items-start gap-4 cursor-pointer">
+                                    <div class="relative flex items-center justify-center mt-1">
+                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded checked:bg-brand-500 checked:border-brand-500 transition-colors" checked>
+                                        <i class="fa-solid fa-check absolute text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-bold text-gray-900">Týdenní souhrn (Souhrn)</p>
+                                        <p class="text-xs text-gray-500 mt-1">Každé pondělí ráno Vám zašleme souhrnný report o počtu nových recenzí, změnách v průměrném hodnocení a kolik z nich čeká na odpověď.</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-100">
+                            <button onclick="showToast('Nastavení upozornění bylo uloženo')" class="px-6 py-2 bg-brand-500 text-white text-sm font-bold rounded-lg shadow-sm hover:bg-brand-600 transition">Uložit nastavení</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL PRO NAHLÁŠENÍ RECENZE -->
+    <div id="report-modal" class="fixed inset-0 bg-gray-900/60 z-[60] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fa-solid fa-flag text-red-500"></i> Nahlásit recenzi Googlu</h3>
+                <button onclick="closeReportModal()" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600 mb-4 leading-relaxed">Společnost Google recenze nemaže jen tak. Musíte prokázat, že recenze porušuje jejich zásady (např. spam, falešný obsah, střet zájmů, nevhodný jazyk).</p>
+                
+                <label class="label-minimal">Důvod nahlášení</label>
+                <div class="relative mb-4">
+                    <select class="input-minimal appearance-none pr-8 text-sm py-2.5">
+                        <option>Tato recenze nepatří k mojí firmě</option>
+                        <option>Spam nebo falešná recenze (Bot)</option>
+                        <option>Střet zájmů (Napsal ji konkurent/bývalý zaměstnanec)</option>
+                        <option>Nevhodný jazyk nebo nenávistný obsah</option>
+                        <option>Osobní útok nebo šikana</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 text-xs pointer-events-none"></i>
+                </div>
+                
+                <div class="bg-orange-50 border border-orange-200 p-3 rounded-lg flex gap-3">
+                    <i class="fa-solid fa-circle-info text-orange-500 mt-0.5"></i>
+                    <p class="text-xs text-orange-800">Po odeslání požadavku přes API bude Google tuto recenzi zkoumat. Schvalovací proces trvá obvykle 3–7 pracovních dní. Do té doby recenze zůstává viditelná.</p>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3 shrink-0">
+                <button onclick="closeReportModal()" class="px-5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition shadow-sm">Zrušit</button>
+                <button onclick="submitReport()" class="px-5 py-2 rounded-lg text-sm font-bold text-white bg-red-500 hover:bg-red-600 transition shadow-sm">Odeslat Googlu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFIKACE -->
+    <div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-3 rounded-lg shadow-xl opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-brand-500"></i>
+        <span id="toast-message" class="text-sm font-medium">Akce byla úspěšná</span>
+    </div>
+
+    <script>
+        // Logika menu
+        function toggleMenu(menuId) {
+            const submenu = document.getElementById(menuId);
+            if(submenu) {
+                submenu.classList.toggle('max-h-0'); submenu.classList.toggle('opacity-0');
+                submenu.classList.toggle('max-h-40'); submenu.classList.toggle('opacity-100'); submenu.classList.toggle('py-1');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        // TABS přepínání
+        function switchTab(tabId) {
+            const tabs = ['tab-inbox', 'tab-ai', 'tab-alerts'];
+            tabs.forEach(t => {
+                document.getElementById(t).classList.add('hidden');
+                document.getElementById(t).classList.remove('block');
+                document.getElementById('btn-' + t).className = 'whitespace-nowrap py-3 px-5 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+            document.getElementById('btn-' + tabId).className = 'whitespace-nowrap py-3 px-5 border-b-2 font-bold text-sm transition-colors border-brand-500 text-brand-600';
+            
+            const mainContainer = document.querySelector('main');
+            if (mainContainer) mainContainer.scrollTop = 0;
+        }
+
+        // TOAST
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            if(!toast) return;
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-4');
+            }, 3000);
+        }
+
+        // Tlačítko odpovědět u recenze (rozbalí textarea)
+        function toggleReplyBox(boxId) {
+            const box = document.getElementById(boxId);
+            if(box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                box.querySelector('textarea').focus();
+            } else {
+                box.classList.add('hidden');
+            }
+        }
+
+        function submitReply(boxId) {
+            showToast('Odpověď byla úspěšně odeslána na Google!');
+            document.getElementById(boxId).classList.add('hidden');
+        }
+
+        // MOCKUP AI GENERACE ODPOVĚDI
+        function generateAiReply(textareaId, sentiment = 'positive') {
+            const textarea = document.getElementById(textareaId);
+            const loadingOverlay = document.getElementById(textareaId.replace('reply-text-', 'ai-loading-'));
+            
+            // Vyprázdnit a ukázat načítání
+            textarea.value = "";
+            loadingOverlay.classList.remove('hidden');
+            loadingOverlay.classList.add('flex');
+
+            // Simulace API callu (1.5 sekundy)
+            setTimeout(() => {
+                loadingOverlay.classList.remove('flex');
+                loadingOverlay.classList.add('hidden');
+                
+                let generatedText = "";
+                if(sentiment === 'positive') {
+                    generatedText = "Dobrý den, Petře, \n\nvelice Vám děkujeme za úžasné hodnocení a milá slova. Těší nás, že Vám náš přístup a nastavení PPC kampaní pomohlo. Budeme se těšit na další úspěšnou spolupráci!\n\nS pozdravem,\nTým Business Power";
+                } else {
+                    generatedText = "Dobrý den, Martine, \n\nvelice se omlouváme za tuto nepříjemnou zkušenost a Vaše zbytečné čekání na pobočce. Toto chování u nás rozhodně není standardem. Došlo k internímu selhání komunikace v diáři makléře.\n\nProsím, kontaktujte nás přímo na info@businesspower.cz, rádi bychom Vám jako omluvu nabídli náhradní termín a konzultaci zdarma.\n\nS úctou k Vašemu času,\nVedení Business Power";
+                }
+
+                // Efekt plynulého psaní
+                let i = 0;
+                textarea.value = "";
+                const typeWriter = setInterval(() => {
+                    textarea.value += generatedText.charAt(i);
+                    i++;
+                    if (i > generatedText.length - 1) {
+                        clearInterval(typeWriter);
+                        showToast('AI návrh byl úspěšně vygenerován.');
+                    }
+                }, 10); // Rychlost psaní
+                
+            }, 1500);
+        }
+
+        // Nahlášení recenze
+        function reportReviewModal() {
+            const modal = document.getElementById('report-modal');
+            const modalContent = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => modalContent.classList.remove('scale-95'), 10);
+        }
+
+        function closeReportModal() {
+            const modal = document.getElementById('report-modal');
+            const modalContent = modal.querySelector('div');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 300);
+        }
+
+        function submitReport() {
+            showToast('Požadavek na odstranění byl odeslán do Google centrály.');
+            closeReportModal();
+        }
+
+    </script>
+</body>
+</html>
