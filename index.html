@@ -317,7 +317,7 @@
                     <div class="space-y-4" id="reviews-list">
                         
                         <!-- RECENZE 1 (Neodpovězená, 4 hvězdy) -->
-                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Praha 13">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Praha 13" data-rating="4" data-time="90">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">PK</div>
@@ -356,7 +356,6 @@
                                 
                                 <div class="relative">
                                     <textarea id="textarea-1" class="input-minimal bg-white w-full border-gray-300 focus:border-brand-500 rounded-md p-3 text-sm transition-all" rows="4" placeholder="Dobrý den, Petře..."></textarea>
-                                    <!-- AI Loader s fixovaným flexboxem a animacemi -->
                                     <div id="loader-1" class="absolute inset-0 bg-white/90 hidden flex-col items-center justify-center rounded-md border border-brand-200 z-10 opacity-0 transition-opacity duration-300">
                                         <div class="typing-indicator flex items-center mb-2"><span></span><span></span><span></span></div>
                                         <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">AI připravuje odpověď</p>
@@ -371,7 +370,7 @@
                         </div>
 
                         <!-- RECENZE 2 (Neodpovězená, 1 hvězda) -->
-                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Brno">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Brno" data-rating="1" data-time="80">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm">MN</div>
@@ -421,7 +420,7 @@
                         </div>
 
                         <!-- RECENZE 3 (Odpovězená ručně, 5 hvězd) -->
-                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Liberec">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Liberec" data-rating="5" data-time="70">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-sm">JS</div>
@@ -471,7 +470,7 @@
                         </div>
 
                         <!-- RECENZE 4 (Neodpovězená, 3 hvězdy, bez textu) -->
-                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Praha 13">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Praha 13" data-rating="3" data-time="70">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-sm">TV</div>
@@ -523,7 +522,7 @@
                         </div>
 
                         <!-- RECENZE 5 (Odpovězeno automatizací, 5 hvězd) -->
-                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Brno">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Brno" data-rating="5" data-time="60">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold text-sm">EB</div>
@@ -575,7 +574,7 @@
                         </div>
 
                         <!-- RECENZE 6 (Neodpovězená, 5 hvězd, s fotkami) -->
-                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Liberec">
+                        <div class="card-minimal p-5 review-item" data-status="unanswered" data-branch="Liberec" data-rating="5" data-time="100">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">DK</div>
@@ -779,67 +778,110 @@
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="automation-rules-container">
-                        <!-- Karta 1: Pravidlo ze šablon -->
-                        <div class="card-minimal p-6 flex flex-col h-full relative group bg-white hover:border-brand-300 transition-all duration-300">
-                            <div class="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="openAutomationModal()" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition" title="Upravit"><i class="fa-solid fa-pen text-xs"></i></button>
-                                <button onclick="this.closest('.card-minimal').remove(); showToast('Pravidlo bylo smazáno');" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition" title="Smazat"><i class="fa-solid fa-trash text-xs"></i></button>
-                            </div>
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-reply-all"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-900 text-base leading-tight">Děkování klientům</h4>
-                                    <p class="text-[10px] text-brand-600 font-bold uppercase tracking-wider mt-0.5">Rotace Šablon</p>
-                                </div>
-                            </div>
-                            <div class="mb-4 flex-1">
-                                <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Pro pobočky:</strong> Praha 13, Brno</p>
-                                <p class="text-sm text-gray-600"><strong class="text-gray-900">Kdy odeslat:</strong> 4 a 5 hvězdiček (bez textu).</p>
-                            </div>
-                            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                                <label class="flex items-center cursor-pointer">
-                                    <div class="relative">
-                                        <input type="checkbox" class="sr-only" checked>
-                                        <div class="block bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
-                                        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                    <div class="space-y-4" id="automation-rules-container">
+                        <!-- Pravidlo 1: Šablony -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm rule-item group">
+                            <div class="p-4 sm:p-5 flex items-center justify-between hover:bg-gray-50 transition cursor-pointer" onclick="toggleRuleAcc('rule-acc-1', 'rule-icon-1')">
+                                <div class="flex items-center gap-4 flex-1 min-w-0">
+                                    <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                        <i class="fa-solid fa-reply-all"></i>
                                     </div>
-                                    <span class="ml-2 text-xs font-bold text-gray-700">Aktivní</span>
-                                </label>
+                                    <div class="min-w-0">
+                                        <div class="flex items-center gap-2">
+                                            <h4 class="font-bold text-gray-900 text-base truncate">Děkování klientům</h4>
+                                            <span class="px-2 py-0.5 bg-brand-50 text-brand-600 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:inline-block shrink-0">Rotace Šablon</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-0.5 truncate">Praha 13, Brno • 4, 5 hvězdiček (bez textu)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 sm:gap-4 shrink-0 pl-2">
+                                    <label class="flex items-center cursor-pointer" onclick="event.stopPropagation();">
+                                        <div class="relative">
+                                            <input type="checkbox" class="sr-only peer" checked onchange="toggleRuleActive(this)">
+                                            <div class="block bg-gray-200 peer-checked:bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
+                                            <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform peer-checked:translate-x-4 shadow-sm"></div>
+                                        </div>
+                                        <span class="ml-2 text-xs font-bold text-gray-700 rule-status-text hidden sm:block">Aktivní</span>
+                                    </label>
+                                    <i id="rule-icon-1" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300 ml-1 sm:ml-2"></i>
+                                </div>
+                            </div>
+                            <div id="rule-acc-1" class="hidden border-t border-gray-200 bg-gray-50">
+                                <div class="p-5 flex flex-col sm:flex-row justify-between gap-6">
+                                    <div class="space-y-4 flex-1">
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Pro pobočky</p>
+                                            <p class="text-sm text-gray-800 font-medium">Praha 13, Brno</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Podmínka spuštění</p>
+                                            <p class="text-sm text-gray-800 font-medium">Hodnocení 4, 5 hvězdiček (bez textu).</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Vytvořil</p>
+                                            <p class="text-sm text-gray-800 font-medium flex items-center gap-1.5"><i class="fa-solid fa-user text-gray-400"></i> Tomáš Gerber</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 items-start shrink-0">
+                                        <button onclick="openAutomationModal()" class="bg-white border border-gray-300 text-gray-700 hover:text-brand-600 hover:border-brand-300 px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-pen"></i> Upravit</button>
+                                        <button onclick="this.closest('.rule-item').remove(); showToast('Pravidlo bylo smazáno');" class="bg-white border border-gray-300 text-gray-700 hover:text-red-500 hover:border-red-300 px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-trash"></i> Smazat</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Karta 2: AI Asistent -->
-                        <div class="card-minimal p-6 flex flex-col h-full relative group bg-white hover:border-brand-300 transition-all duration-300">
-                            <div class="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="openAutomationModal()" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition" title="Upravit"><i class="fa-solid fa-pen text-xs"></i></button>
-                                <button onclick="this.closest('.card-minimal').remove(); showToast('Pravidlo bylo smazáno');" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition" title="Smazat"><i class="fa-solid fa-trash text-xs"></i></button>
-                            </div>
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-900 text-base leading-tight">Chytrá odpověď na text</h4>
-                                    <p class="text-[10px] text-brand-600 font-bold uppercase tracking-wider mt-0.5">AI Asistent</p>
-                                </div>
-                            </div>
-                            <div class="mb-4 flex-1">
-                                <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Pro pobočky:</strong> Všechny pobočky (3)</p>
-                                <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Kdy odeslat:</strong> 4 a 5 hvězdiček s textem.</p>
-                                <p class="text-sm text-gray-600"><strong class="text-gray-900">Tón AI:</strong> Přátelský a moderní</p>
-                            </div>
-                            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                                <label class="flex items-center cursor-pointer">
-                                    <div class="relative">
-                                        <input type="checkbox" class="sr-only" checked>
-                                        <div class="block bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
-                                        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                        <!-- Pravidlo 2: AI Asistent -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm rule-item group">
+                            <div class="p-4 sm:p-5 flex items-center justify-between hover:bg-gray-50 transition cursor-pointer" onclick="toggleRuleAcc('rule-acc-2', 'rule-icon-2')">
+                                <div class="flex items-center gap-4 flex-1 min-w-0">
+                                    <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
                                     </div>
-                                    <span class="ml-2 text-xs font-bold text-gray-700">Aktivní</span>
-                                </label>
+                                    <div class="min-w-0">
+                                        <div class="flex items-center gap-2">
+                                            <h4 class="font-bold text-gray-900 text-base truncate">Chytrá odpověď na text</h4>
+                                            <span class="px-2 py-0.5 bg-brand-50 text-brand-600 rounded text-[10px] font-bold uppercase tracking-wider hidden sm:inline-block shrink-0">AI Asistent</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-0.5 truncate">Všechny pobočky (3) • 4, 5 hvězdiček s textem</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 sm:gap-4 shrink-0 pl-2">
+                                    <label class="flex items-center cursor-pointer" onclick="event.stopPropagation();">
+                                        <div class="relative">
+                                            <input type="checkbox" class="sr-only peer" checked onchange="toggleRuleActive(this)">
+                                            <div class="block bg-gray-200 peer-checked:bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
+                                            <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform peer-checked:translate-x-4 shadow-sm"></div>
+                                        </div>
+                                        <span class="ml-2 text-xs font-bold text-gray-700 rule-status-text hidden sm:block">Aktivní</span>
+                                    </label>
+                                    <i id="rule-icon-2" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300 ml-1 sm:ml-2"></i>
+                                </div>
+                            </div>
+                            <div id="rule-acc-2" class="hidden border-t border-gray-200 bg-gray-50">
+                                <div class="p-5 flex flex-col sm:flex-row justify-between gap-6">
+                                    <div class="space-y-4 flex-1">
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Pro pobočky</p>
+                                            <p class="text-sm text-gray-800 font-medium">Všechny pobočky (3)</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Podmínka spuštění</p>
+                                            <p class="text-sm text-gray-800 font-medium">Hodnocení 4, 5 hvězdiček s textem.</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tón AI Asistenta</p>
+                                            <p class="text-sm text-gray-800 font-medium">Přátelský a moderní</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Vytvořil</p>
+                                            <p class="text-sm text-gray-800 font-medium flex items-center gap-1.5"><i class="fa-solid fa-user text-gray-400"></i> Tomáš Gerber</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 items-start shrink-0">
+                                        <button onclick="openAutomationModal()" class="bg-white border border-gray-300 text-gray-700 hover:text-brand-600 hover:border-brand-300 px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-pen"></i> Upravit</button>
+                                        <button onclick="this.closest('.rule-item').remove(); showToast('Pravidlo bylo smazáno');" class="bg-white border border-gray-300 text-gray-700 hover:text-red-500 hover:border-red-300 px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-trash"></i> Smazat</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1293,7 +1335,7 @@
             
             const reviews = Array.from(list.querySelectorAll('.review-item'));
 
-            // Nejdříve skryjeme/zobrazíme podle filtru
+            // Skrytí/Zobrazení dle filtru
             reviews.forEach(review => {
                 const rStatus = review.dataset.status;
                 const rStars = review.dataset.rating;
@@ -1310,7 +1352,7 @@
                 }
             });
 
-            // Poté seřadíme viditelné i skryté prvky a vložíme zpět do DOMu
+            // Řazení viditelných
             reviews.sort((a, b) => {
                 const ratingA = parseInt(a.dataset.rating || 0);
                 const ratingB = parseInt(b.dataset.rating || 0);
@@ -1442,7 +1484,7 @@
             
             textarea.disabled = true;
             loader.classList.remove('hidden');
-            loader.classList.add('flex');
+            loader.style.display = 'flex'; // Zaručí flexbox kvůli centrování obsahu
             setTimeout(() => loader.classList.remove('opacity-0'), 10);
             
             setTimeout(() => {
@@ -1450,7 +1492,7 @@
                 loader.classList.add('opacity-0');
                 setTimeout(() => {
                     loader.classList.add('hidden');
-                    loader.classList.remove('flex');
+                    loader.style.display = ''; // Odstranění inline stylu
                     textarea.disabled = false;
                 }, 300);
             }, 1500);
@@ -1786,8 +1828,8 @@
                 icon = '<i class="fa-solid fa-reply-all"></i>';
                 circleClass = 'bg-brand-50 text-brand-600';
                 textClass = 'text-brand-600';
-                subtitle = 'Auto-odpovědi';
-                settingsText = `<p class="text-sm text-gray-600"><strong class="text-gray-900">Kdy odeslat:</strong> Hodnocení ${starsText} (bez textu).</p>`;
+                subtitle = 'Rotace Šablon';
+                settingsText = `<p class="text-sm text-gray-800 font-medium">Hodnocení ${starsText} (bez textu).</p>`;
             } else {
                 icon = '<i class="fa-solid fa-wand-magic-sparkles"></i>';
                 circleClass = 'bg-purple-50 text-purple-600';
@@ -1795,40 +1837,59 @@
                 subtitle = 'AI Asistent';
                 const toneSelect = document.getElementById('ai-tone-select');
                 const tone = toneSelect.options[toneSelect.selectedIndex].text;
-                settingsText = `
-                    <p class="text-sm text-gray-600 mb-1"><strong class="text-gray-900">Kdy odeslat:</strong> Hodnocení ${starsText}.</p>
-                    <p class="text-sm text-gray-600"><strong class="text-gray-900">Tón AI:</strong> ${tone}</p>
-                `;
+                settingsText = `<p class="text-sm text-gray-800 font-medium">Hodnocení ${starsText} s textem.</p>`;
             }
 
+            const ruleId = Date.now();
+
             const newCardHTML = `
-                <div class="card-minimal p-6 flex flex-col h-full relative group bg-white hover:border-brand-300 transition-all duration-300">
-                    <div class="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="openAutomationModal()" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-brand-600 flex items-center justify-center transition" title="Upravit"><i class="fa-solid fa-pen text-xs"></i></button>
-                        <button onclick="this.closest('.card-minimal').remove(); showToast('Pravidlo bylo smazáno');" class="w-8 h-8 rounded bg-gray-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition" title="Smazat"><i class="fa-solid fa-trash text-xs"></i></button>
-                    </div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full ${circleClass} flex items-center justify-center shrink-0">
-                            ${icon}
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 text-base leading-tight">${nameInput}</h4>
-                            <p class="text-[10px] ${textClass} font-bold uppercase tracking-wider mt-0.5">${subtitle}</p>
-                        </div>
-                    </div>
-                    <div class="mb-4 flex-1">
-                        <p class="text-sm text-gray-600 mb-2"><strong class="text-gray-900">Pro pobočky:</strong> ${branches}</p>
-                        ${settingsText}
-                    </div>
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <label class="flex items-center cursor-pointer">
-                            <div class="relative">
-                                <input type="checkbox" class="sr-only" checked>
-                                <div class="block bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
-                                <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm rule-item group mb-4">
+                    <div class="p-4 sm:p-5 flex items-center justify-between hover:bg-gray-50 transition cursor-pointer" onclick="toggleRuleAcc('rule-acc-${ruleId}', 'rule-icon-${ruleId}')">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-10 h-10 rounded-full ${circleClass} flex items-center justify-center shrink-0">
+                                ${icon}
                             </div>
-                            <span class="ml-2 text-xs font-bold text-gray-700">Aktivní</span>
-                        </label>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-bold text-gray-900 text-base truncate">${nameInput}</h4>
+                                    <span class="px-2 py-0.5 ${circleClass} rounded text-[10px] font-bold uppercase tracking-wider hidden sm:inline-block shrink-0">${subtitle}</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-0.5 truncate">${branches} • ${starsText}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 sm:gap-4 shrink-0 pl-2">
+                            <label class="flex items-center cursor-pointer" onclick="event.stopPropagation();">
+                                <div class="relative">
+                                    <input type="checkbox" class="sr-only peer" checked onchange="toggleRuleActive(this)">
+                                    <div class="block bg-gray-200 peer-checked:bg-brand-500 w-10 h-6 rounded-full transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform peer-checked:translate-x-4 shadow-sm"></div>
+                                </div>
+                                <span class="ml-2 text-xs font-bold text-gray-700 rule-status-text hidden sm:block">Aktivní</span>
+                            </label>
+                            <i id="rule-icon-${ruleId}" class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300 ml-1 sm:ml-2"></i>
+                        </div>
+                    </div>
+                    <div id="rule-acc-${ruleId}" class="hidden border-t border-gray-200 bg-gray-50">
+                        <div class="p-5 flex flex-col sm:flex-row justify-between gap-6">
+                            <div class="space-y-4 flex-1">
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Pro pobočky</p>
+                                    <p class="text-sm text-gray-800 font-medium">${branches}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Podmínka spuštění</p>
+                                    ${settingsText}
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Vytvořil</p>
+                                    <p class="text-sm text-gray-800 font-medium flex items-center gap-1.5"><i class="fa-solid fa-user text-gray-400"></i> Tomáš Gerber</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 items-start shrink-0">
+                                <button onclick="openAutomationModal()" class="bg-white border border-gray-300 text-gray-700 hover:text-brand-600 hover:border-brand-300 px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-pen"></i> Upravit</button>
+                                <button onclick="this.closest('.rule-item').remove(); showToast('Pravidlo bylo smazáno');" class="bg-white border border-gray-300 text-gray-700 hover:text-red-500 hover:border-red-300 px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-trash"></i> Smazat</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1836,6 +1897,32 @@
             document.getElementById('automation-rules-container').insertAdjacentHTML('beforeend', newCardHTML);
             showToast('Pravidlo bylo úspěšně vytvořeno.');
             closeAutomationModal();
+        }
+
+        function toggleRuleActive(checkbox) {
+            const statusText = checkbox.closest('label').querySelector('.rule-status-text');
+            if(checkbox.checked) {
+                statusText.innerText = "Aktivní";
+                statusText.classList.remove('text-gray-400');
+                statusText.classList.add('text-gray-700');
+            } else {
+                statusText.innerText = "Neaktivní";
+                statusText.classList.remove('text-gray-700');
+                statusText.classList.add('text-gray-400');
+            }
+            showToast(checkbox.checked ? 'Pravidlo je aktivní' : 'Pravidlo bylo deaktivováno');
+        }
+
+        function toggleRuleAcc(accId, iconId) {
+            const acc = document.getElementById(accId);
+            const icon = document.getElementById(iconId);
+            if (acc.classList.contains('hidden')) {
+                acc.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                acc.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
         }
 
         // Zavírání okna s pobočkami při kliknutí mimo
